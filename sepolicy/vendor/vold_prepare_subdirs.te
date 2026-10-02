@@ -1,0 +1,2 @@
+# Suppress: vold_prepare_subdirs needs fsetid capability for chown during user data setup
+dontaudit vold_prepare_subdirs self:capability fsetid;

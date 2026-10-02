@@ -1,0 +1,44 @@
+<compatibility-matrix version="1.0" type="framework">
+    <hal format="aidl" optional="true">
+        <name>android.hardware.graphics.composer3</name>
+        <version>3</version>
+        <interface>
+            <name>IComposer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
+        <name>android.hardware.thermal</name>
+        <version>2</version>
+        <interface>
+            <name>IThermal</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- Blackbox, registered by the same hypsys_vendor daemon right after
+         IMiSysImpl. If it is not declared, servicemanager rejects the add with
+         EX_ILLEGAL_ARGUMENT and the daemon CHECK-fails and crash-loops. -->
+    <hal format="aidl" optional="true">
+        <name>vendor.xiaomi.hardware.blackbox</name>
+        <version>1</version>
+        <interface>
+            <name>IBlackboxImpl</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <!-- MiSys (HypSys). MiuiCamera stages its watermark layout/assets through
+         IMiSysImpl; without this the device manifest entry has no matrix side
+         and VINTF reports the build INCOMPATIBLE. -->
+    <hal format="aidl" optional="true">
+        <name>vendor.xiaomi.hardware.misys.common</name>
+        <version>3</version>
+        <interface>
+            <name>IHypSysIntl</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IMiSysImpl</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

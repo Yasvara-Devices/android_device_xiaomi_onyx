@@ -1,0 +1,2 @@
+# Suppress Google Play Services attempting to inspect ADB debug status
+dontaudit gmscore_app adbd_prop:file r_file_perms;

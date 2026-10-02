@@ -1,0 +1,7 @@
+ro.miui.customized.region	u:object_r:build_prop:s0
+ro_miui_region	u:object_r:build_prop:s0
+ro.miui.build.region	u:object_r:build_prop:s0
+
+# Dolby Volume Leveler control props (longest-prefix match beats the plat
+# persist.audio. -> audio_prop rule). Covers .volume_leveler and .boost.
+persist.audio.dolby.	u:object_r:dolby_audio_prop:s0

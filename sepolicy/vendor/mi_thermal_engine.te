@@ -1,0 +1,38 @@
+# Copyright (C) 2026 IRedDragonICY
+# SPDX-License-Identifier: GPL-2.0-only
+
+# mi_thermal_engine SELinux domain
+type mi_thermal_engine, domain;
+type mi_thermal_engine_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(mi_thermal_engine)
+
+# Thermal zones + cooling devices + thermal_message
+allow mi_thermal_engine sysfs_thermal:dir r_dir_perms;
+allow mi_thermal_engine sysfs_thermal:file rw_file_perms;
+
+# CPU frequency (scaling_max_freq for 4 policies)
+allow mi_thermal_engine sysfs_devices_system_cpu:dir r_dir_perms;
+allow mi_thermal_engine sysfs_devices_system_cpu:file rw_file_perms;
+
+# GPU frequency (max_gpuclk via kgsl)
+allow mi_thermal_engine vendor_sysfs_kgsl:dir r_dir_perms;
+allow mi_thermal_engine vendor_sysfs_kgsl:file rw_file_perms;
+allow mi_thermal_engine vendor_sysfs_kgsl:lnk_file r_file_perms;
+
+# Charging FCC control
+allow mi_thermal_engine vendor_sysfs_xm_power:dir r_dir_perms;
+allow mi_thermal_engine vendor_sysfs_xm_power:file rw_file_perms;
+
+# Battery temperature
+allow mi_thermal_engine vendor_sysfs_battery_supply:file r_file_perms;
+
+# Power save mode
+allow mi_thermal_engine sysfs_power_save:dir r_dir_perms;
+allow mi_thermal_engine sysfs_power_save:file rw_file_perms;
+
+# CPU utilisation for dynamic thermal budget (ThermalBudget reads /proc/stat)
+allow mi_thermal_engine proc_stat:file r_file_perms;
+
+# System properties for IPC with MiThermalService (system_public cross-domain)
+get_prop(mi_thermal_engine, mithermal_prop)

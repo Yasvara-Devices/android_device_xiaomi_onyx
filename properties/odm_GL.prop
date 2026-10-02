@@ -1,0 +1,5 @@
+bluetooth.device.default_name=POCO F7
+ro.product.odm.model=25053PC47G
+ro.product.odm.name=onyx_global
+ro.vendor.radio.build_region=global
+vendor.usb.product_string=POCO F7

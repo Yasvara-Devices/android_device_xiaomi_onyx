@@ -1,0 +1,8 @@
+allow tee boot_block_device:blk_file { read open };
+allow tee tee_device:chr_file { read write open };
+allow tee vendor_gpt_block_device:blk_file { read open };
+allow tee vendor_xbl_block_device:blk_file { read open };
+
+# Suppress: QSEE accesses UFS SCSI LUN device nodes (neverallow prevents allow)
+dontaudit tee device:chr_file { read write open ioctl };
+dontaudit tee self:capability dac_read_search;

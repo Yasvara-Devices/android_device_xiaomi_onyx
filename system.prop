@@ -1,0 +1,34 @@
+
+# Leica Camera
+ro.product.mod_device=onyx_leica_global
+ro.miui.customized.clientid=2
+persist.vendor.camera.leica.enable=1
+ro.camera.leica=1
+
+# Unlock 10-Bit Pro Video & Vlog (Master Cinema)
+ro.vendor.camera.features.mimovie=1
+persist.vendor.camera.mimovie.10bit=1
+ro.vendor.camera.vlog.enable=1
+ro.vendor.camera.video.hdr10plus=1
+
+# Unlock 4K 60FPS Video Recording
+ro.vendor.camera.video.4k60fps=1
+ro.vendor.camera.features.4k60fps=1
+persist.vendor.camera.video.4k60fps=1
+ro.vendor.camera.features.video.4k60fps=1
+
+# MIUI Camera Requirements
+ro.miui.build.region=Global
+ro.miui.customized.region=id
+ro_miui_region=Global
+# MIVI and auxiliary camera properties for LMC GCam XML support
+# com.android.camera (MiuiCamera) must be here: Camera.shouldExposeAuxCamera() gates
+# every camera id >= 2 on this list, and without it MiuiCamera only ever sees [0, 1].
+# That makes Camera2CompatAdapterRole#init() fail at startup, getMainBackCameraId()
+# return -1, and photo mode open camera "-1" -> "can't connect" until you switch modes.
+# NOTE: this is a non-ro property, so the value is capped at 92 bytes (PROP_VALUE_MAX).
+# Adding com.android.camera to the old list came to 109 bytes and would be dropped
+# silently, so GoogleCamera.Eng (not installed here) was removed to make room. 73 bytes.
+vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.google.android.GoogleCamera,com.android.camera
+vendor.camera.support.mivi=true
+hypercamera.disable_app_default_config=true

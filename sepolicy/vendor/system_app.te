@@ -1,0 +1,45 @@
+# Aware
+get_prop(system_app, vendor_aware_available_prop);
+
+# Allow Dolby app (system_app) to communicate with DMS AIDL service
+typeattribute system_app hal_aidl_dms_client;
+allow system_app hal_aidl_dms_service:service_manager find;
+binder_call(system_app, hal_aidl_dms_default)
+
+# Allow Dolby app to read/write DMS SQLite database
+# Use dedicated dolby_data_file type to avoid vendor_data_file neverallow
+allow system_app dolby_data_file:dir { search read open getattr };
+allow system_app dolby_data_file:file { read write open getattr lock };
+
+# GameSpace: Allow system_app to access Xiaomi Touch Feature HAL
+# Required for XiaomiTouchFeatureClient (HTSR, SuperTouch, HotArea, etc.)
+typeattribute system_app hal_touchfeature_xiaomi_client;
+allow system_app hal_touchfeature_xiaomi_service:service_manager find;
+binder_call(system_app, hal_touchfeature_xiaomi_default)
+
+# GameSpace: Allow reading GPU busy percentage (kgsl sysfs)
+# Required for GPU usage monitor in Game Turbo overlay
+allow system_app vendor_sysfs_kgsl:dir r_dir_perms;
+allow system_app vendor_sysfs_kgsl:file r_file_perms;
+allow system_app vendor_sysfs_kgsl:lnk_file r_file_perms;
+
+# GameSpace: Allow reading /proc/stat for CPU usage monitoring
+# Denied: system_app → proc_stat:file { read open getattr }
+allow system_app proc_stat:file r_file_perms;
+
+# GameSpace: Allow reading CPU frequency from sysfs
+# Path: /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+allow system_app sysfs_devices_system_cpu:file r_file_perms;
+allow system_app sysfs_devices_system_cpu:dir r_dir_perms;
+
+# GameSpace: Allow reading GPU clock frequency from kgsl sysfs
+# Path: /sys/class/kgsl/kgsl-3d0/gpuclk
+allow system_app vendor_sysfs_kgsl_gpuclk:file r_file_perms;
+
+# GameSpace: bypass charging control (MCA smart_charge)
+# Path: /sys/class/xm_power/charger/smart_charge/bypass_charge{,_state}
+# The node is a symlink into /sys/devices/platform/soc/soc:smart_charge, which
+# genfs_contexts already labels vendor_sysfs_xm_power - hence lnk_file too.
+allow system_app vendor_sysfs_xm_power:dir r_dir_perms;
+allow system_app vendor_sysfs_xm_power:file rw_file_perms;
+allow system_app vendor_sysfs_xm_power:lnk_file r_file_perms;

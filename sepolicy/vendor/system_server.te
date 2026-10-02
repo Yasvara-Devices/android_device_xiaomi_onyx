@@ -1,0 +1,9 @@
+# Copyright (C) 2026 IRedDragonICY
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Thermal/performance control has been moved out of system_server:
+# GameSpace (system_app) now owns all kernel-node access — see
+# gamespace_app.te (vendor) and sepolicy/private/gamespace_app.te.
+
+# Battery supply temperature reading (battery stats / telemetry)
+allow system_server vendor_sysfs_battery_supply:file r_file_perms;

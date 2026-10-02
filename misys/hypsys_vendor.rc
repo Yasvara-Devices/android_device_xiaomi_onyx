@@ -1,0 +1,7 @@
+service vendor.misys.common /vendor/bin/hypsys_vendor
+    user system
+    group system root log cache everybody media_rw debuggerd
+    file /dev/kmsg r
+    interface aidl vendor.xiaomi.hardware.misys.common.IMiSysImpl/default
+    disabled
+

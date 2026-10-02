@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Doze: does this device support STATE_DOZE?  -->
+    <bool name="doze_display_state_supported">true</bool>
+
+    <!-- Should we vibrate on an icon animation of the shelf. This should only be active if the
+     vibrator is capable of subtle vibrations -->
+    <bool name="config_vibrateOnIconAnimation">true</bool>
+
+    <!-- Preferred refresh rate at keyguard, if supported by the display. Overrides
+         keyguardMaxRefreshRate.
+         MUST be a rate that actually exists in qcom,dsi-supported-dfps-list
+         (OC 135/90/60). Matching the top rate means
+         lock/unlock is not a transition at all. -->
+    <integer name="config_keyguardRefreshRate">135</integer>
+
+    <!-- Preferred max refresh rate at keyguard, if supported by the display.
+         Overridden by config_keyguardRefreshRate above; kept in sync so it
+         cannot reintroduce a switch if that one is ever set to 0. -->
+    <integer name="config_keyguardMaxRefreshRate">135</integer>
+
+    <!-- Whether to play turbulence noise after clicking the play button -->
+    <bool name="config_turbulenceNoise">false</bool>
+
+    <!-- FPSInfoService FPS node file path -->
+    <string name="config_fpsInfoSysNode" translatable="false">/sys/class/drm/card0/card0-sde-crtc-0/measured_fps</string>
+
+    <!-- Override GMS overlay: clear hardcoded Google Markup (not installed).
+         Empty = falls back to system chooser → Google Photos editor works. -->
+    <string name="config_screenshotEditor" translatable="false"></string>
+
+</resources>

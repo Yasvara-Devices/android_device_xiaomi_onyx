@@ -1,0 +1,8 @@
+# Clear ADSP sensor registry cache on every boot.
+# Xiaomi's cached axis mapping in /mnt/vendor/persist/sensors/registry/
+# can become stale or corrupt after ROM updates, causing rotation and
+# gyro issues. Clearing forces ADSP to re-parse from vendor JSON configs.
+on post-fs-data
+    rm /mnt/vendor/persist/sensors/registry/parsed_file_list.csv
+    rm /mnt/vendor/persist/sensors/sns_reg_version
+    exec u:r:vendor_init:s0 -- /vendor/bin/sh -c "rm -rf /mnt/vendor/persist/sensors/registry/registry/sm8735_lsm6dsv_0.json.*"

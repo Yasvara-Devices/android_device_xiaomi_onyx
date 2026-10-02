@@ -1,0 +1,2 @@
+# Suppress: storaged reads generic sysfs stat for storage health monitoring
+dontaudit storaged sysfs:file read;

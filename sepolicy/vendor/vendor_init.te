@@ -1,0 +1,40 @@
+dontaudit vendor_init default_prop:file read;
+dontaudit vendor_init radio_prop:file read;
+
+set_prop(vendor_init, vendor_camera_prop)
+set_prop(vendor_init, vendor_deviceid_prop)
+set_prop(vendor_init, vendor_displayfeature_prop)
+set_prop(vendor_init, vendor_mischeck_prop)
+set_prop(vendor_init, vendor_qcc_prop)
+set_prop(vendor_init, vendor_radio_prop)
+set_prop(vendor_init, vendor_ssr_prop)
+set_prop(vendor_init, vendor_thermal_normal_prop)
+set_prop(vendor_init, vendor_touchfeature_prop)
+
+# AFME/GameSpace: allow vendor_init to forward persist.sys.game.enhance.*
+# → vendor.display.game.* and persist.sys.afme.smooth_motion
+# → vendor.display.use_smooth_motion via init.rc property triggers
+set_prop(vendor_init, vendor_display_prop)
+set_prop(vendor_init, vendor_mpctl_prop)
+
+# Suppress vendor_init build_prop denial (neverallow prevents set_prop)
+# ro.product.marketname set failure is benign - device shows generic name
+dontaudit vendor_init build_prop:property_service set;
+
+allow vendor_init minidump_data_file:dir create_dir_perms;
+allow vendor_init minidump_data_file:file create_file_perms;
+allow vendor_init proc_hung_task:file rw_file_perms;
+allow vendor_init sysfs:lnk_file setattr;
+
+# Fix: vendor_init needs setattr on /data/vendor_de during boot storage setup
+allow vendor_init vendor_userdir_file:dir { setattr };
+
+# Fix: vendor_init tries to set bluetooth stack properties
+dontaudit vendor_init bluetooth_prop:property_service set;
+
+# FPS info
+allow init vendor_sysfs_graphics:dir search;
+allow init vendor_sysfs_graphics:file rw_file_perms;
+
+# Suppress: vendor_init checks /mnt/rescue partition attributes at boot
+dontaudit vendor_init cache_file:dir getattr;

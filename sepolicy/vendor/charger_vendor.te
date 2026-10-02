@@ -1,0 +1,15 @@
+# Offline charging mode - charger_vendor domain
+# When the health HAL starts in charger mode (--charger), it runs
+# as charger_vendor domain to display the battery animation.
+
+# Access Xiaomi charging sysfs (xm_power) for battery status and power_off_mode
+allow charger_vendor vendor_sysfs_xm_power:dir r_dir_perms;
+allow charger_vendor vendor_sysfs_xm_power:file rw_file_perms;
+
+# Access charger partition block device for charger state
+allow charger_vendor vendor_charge_block_device:blk_file r_file_perms;
+
+# Access backlight for display brightness control during charging
+allow charger_vendor sysfs_leds:dir r_dir_perms;
+allow charger_vendor sysfs_leds:file rw_file_perms;
+

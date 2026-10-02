@@ -1,0 +1,89 @@
+# CNE
+persist.vendor.cne.feature=1
+
+# Device
+ro.product.marketname=POCO F7
+
+# GPS
+persist.backup.ntpServer=0.pool.ntp.org
+
+# HWUI
+debug.hwui.skia_tracing_enabled=false
+debug.hwui.skia_use_perfetto_track_events=false
+
+# Media
+media.stagefright.thumbnail.prefer_hw_codecs=true
+ro.mediaserver.64b.enable=true
+ro.media.recorder-max-base-layer-fps=60
+ro.media.xml_variant.profiles=_tuna_v0
+
+# QTI
+ro.vendor.qti.va_aosp.support=1
+
+# Radio
+persist.vendor.data.mode=concurrent
+ril.subscription.types=NV,RUIM
+telephony.lteOnCdmaDevice=1
+
+# Radio VoNR Calling
+persist.radio.is_vonr_enabled_0=true
+persist.radio.is_vonr_enabled_1=true
+persist.vendor.vonr_setting_support=1
+
+# WFD
+persist.debug.wfd.enable=1
+
+# Face Unlock
+ro.face.sense_service.camera_id=1
+
+# HWUI render cache sizes — tuned for 12GB RAM device
+# AOSP defaults are for low-RAM devices, we have headroom to go bigger
+ro.hwui.texture_cache_size=128
+ro.hwui.layer_cache_size=64
+ro.hwui.path_cache_size=32
+ro.hwui.gradient_cache_size=2
+ro.hwui.drop_shadow_cache_size=12
+ro.hwui.text_small_cache_width=2048
+ro.hwui.text_small_cache_height=2048
+ro.hwui.text_large_cache_width=4096
+ro.hwui.text_large_cache_height=4096
+persist.sys.debug.multi_window=true
+
+# Log noise
+# System-level log chattiness suppression
+persist.log.tag.SDM=W
+persist.log.tag.MiDisplayDM=W
+persist.log.tag.KeyguardViewMediator=I
+persist.log.tag.android.hardware.secure_element-service.qti=W
+persist.log.tag.libsensor-boledalgo=W
+persist.log.tag.MIUS=W
+
+# Mixed-level: keep errors, drop the rest
+persist.log.tag.GPQeSE-HAL=E
+persist.log.tag.libbinder.IPCThreadState=E
+
+# Blob bugs that only ever emit the same unactionable error
+# (COMU "ar_osal_mutex is NULL", SmcInvoke "Invalid handle")
+persist.log.tag.COMU=S
+persist.log.tag.SmcInvoke_MinkDescriptor=S
+
+# Telephony and network chatter
+persist.log.tag.THP=WARN
+persist.log.tag.RILJ=WARN
+persist.log.tag.RILUtils=WARN
+persist.log.tag.SST-0=WARN
+persist.log.tag.DNC-0=WARN
+persist.log.tag.Phone-0=WARN
+persist.log.tag.Phone=WARN
+persist.log.tag.TelephonyRegistry=WARN
+persist.log.tag.TelephonyCountryDetector=WARN
+persist.log.tag.SatelliteController=WARN
+persist.log.tag.IWlanJni=WARN
+persist.log.tag.InetDiagMessage=WARN
+persist.log.tag.sensors-hal=S
+persist.log.tag.BiometricService=WARN
+persist.log.tag.AuthService=WARN
+persist.log.tag.VendorTagDescriptor=WARN
+persist.log.tag.SensorPowerStatsLayout=WARN
+
+

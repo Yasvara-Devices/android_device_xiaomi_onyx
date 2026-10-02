@@ -1,0 +1,56 @@
+# Audio
+af.fast_track_multiplier=1
+audio.deep_buffer.media=true
+audio.offload.min.duration.secs=15
+audio.offload.video=true
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true
+media.stagefright.audio.deep=true
+
+# Bluetooth
+bluetooth.device_id.product_id=0x1200
+bluetooth.device_id.vendor_id=0x038F
+bluetooth.profile.a2dp.source.enabled=true
+bluetooth.profile.avrcp.controller.enabled=true
+bluetooth.profile.avrcp.target.enabled=true
+bluetooth.profile.bap.broadcast.assist.enabled=true
+bluetooth.profile.bap.broadcast.source.enabled=true
+bluetooth.profile.bap.unicast.client.enabled=true
+bluetooth.profile.bas.client.enabled=true
+bluetooth.profile.ccp.server.enabled=true
+bluetooth.profile.csip.set_coordinator.enabled=true
+bluetooth.profile.gatt.enabled=true
+bluetooth.profile.hap.client.enabled=true
+bluetooth.profile.hfp.ag.enabled=true
+bluetooth.profile.hid.device.enabled=true
+bluetooth.profile.hid.host.enabled=true
+bluetooth.profile.map.server.enabled=true
+bluetooth.profile.mcp.server.enabled=true
+bluetooth.profile.opp.enabled=true
+bluetooth.profile.pan.nap.enabled=true
+bluetooth.profile.pan.panu.enabled=true
+bluetooth.profile.pbap.server.enabled=true
+bluetooth.profile.vcp.controller.enabled=true
+
+# LMKD — data-driven tuning for 12GB RAM + 6GB ZRAM
+# Analyzed against AOSP, Pixel 9 Pro, Stock MIUI baselines
+ro.lmk.use_psi=true
+ro.lmk.kill_heaviest_task=true
+ro.lmk.use_minfree_levels=false
+ro.lmk.low=1001
+ro.lmk.medium=800
+ro.lmk.critical=0
+ro.lmk.psi_partial_stall_ms=50
+ro.lmk.psi_complete_stall_ms=700
+ro.lmk.swap_util_max=80
+ro.lmk.swap_free_low_percentage=10
+ro.lmk.kill_timeout_ms=500
+ro.lmk.downgrade_pressure=35
+
+# Phantom process monitoring — disabled to keep game subprocesses alive
+persist.sys.fflag.override.settings_enable_monitor_phantom_procs=false
+
+# RKPD
+remote_provisioning.enable_rkpd=true
+remote_provisioning.hostname=remoteprovisioning.googleapis.com
+remote_provisioning.strongbox.rkp_only=true

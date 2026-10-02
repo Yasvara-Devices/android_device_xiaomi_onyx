@@ -1,0 +1,38 @@
+# Suppress non-critical default_prop read denials from vendor apps
+# These apps have fallback paths and don't need default_prop access
+# Note: parts_app is in private sepolicy, cannot be referenced from vendor
+dontaudit vendor_cacertservice_app default_prop:file read;
+dontaudit vendor_qtidataservices_app default_prop:file read;
+dontaudit vendor_timeservice_app default_prop:file read;
+dontaudit vendor_hal_citsensorservice_xiaomi_default default_prop:file read;
+
+# Camera HAL reads default_prop during init - suppress harmless denial
+dontaudit hal_camera_default default_prop:file r_file_perms;
+
+# Fingerprint
+dontaudit hal_fingerprint storage_file:dir search;
+
+# Harmless QCOM denials
+dontaudit {
+  init
+  priv_app
+} {
+  bt_firmware_file
+  firmware_file
+}:filesystem getattr;
+
+dontaudit priv_app mnt_vendor_file:dir search;
+dontaudit hal_wifi_default self:capability sys_module;
+
+# Wifi
+dontaudit hal_wifi_default persist_vendor_debug_wifi_prop:file read;
+
+# Shell
+dontaudit shell kernel:system syslog_read;
+dontaudit shell {
+  system_dlkm_file
+  mnt_vendor_file
+  metadata_file
+  linkerconfig_file
+}:dir search;
+dontaudit shell proc_filesystems:file read;

@@ -1,0 +1,49 @@
+type hal_misys_vendor, domain;
+type hal_misys_vendor_exec, exec_type, vendor_file_type, file_type;
+
+type hal_misys_vendor_service, hal_service_type, service_manager_type;
+
+binder_use(hal_misys_vendor)
+init_daemon_domain(hal_misys_vendor)
+
+# Serves vendor.xiaomi.hardware.misys.common.{IMiSysImpl,IHypSysIntl}/default
+allow hal_misys_vendor hal_misys_vendor_service:service_manager { add find };
+binder_call(hal_misys_vendor, platform_app)
+
+# It is also a *client* of the local xiaomi.system.hypsys.common dummy
+# (hal_hypsys_vendor). main() CHECK-fails and SIGABRTs if it cannot reach
+# IHypSysSsiIntl/default, so without this the daemon just crash-loops.
+allow hal_misys_vendor hal_hypsys_vendor_service:service_manager find;
+binder_call(hal_misys_vendor, hal_hypsys_vendor)
+
+# Stages MiuiCamera's watermark layout and assets where the MIVI plugin reads them
+allow hal_misys_vendor vendor_camera_data_file:dir create_dir_perms;
+allow hal_misys_vendor vendor_camera_data_file:file create_file_perms;
+
+# MiuiCamera never hands over a path - it copies into shared memory and passes the
+# fd ("my_shm"/getFdDup/"Failed to get pfd" in com.xiaomi.cam.watermark). That is by
+# design: domain.te neverallows any non-appdomain touching app_data_file.
+allow hal_misys_vendor platform_app:fd use;
+allow hal_misys_vendor appdomain_tmpfs:file { getattr map read write };
+
+# "file /dev/kmsg r" in the init rc
+allow hal_misys_vendor kmsg_device:chr_file { open read write };
+
+# Observed denial from a permissive run: HardWareInfo reads vendor.camera.sensor.*
+get_prop(hal_misys_vendor, vendor_camera_sensor_prop)
+
+# ChargerLogger polls sys.boot_completed / dev.bootcomplete and is denied ~0.5x/s
+# forever, which is the only recurring avc on this build. Unlike default_prop below
+# this one is grantable: boot_status_prop is a system_restricted_prop, and the read
+# neverallow in system/sepolicy/private/property.te excludes
+# -system_restricted_property_type (vendor_init is granted it the same way). The
+# other neverallow there covers property_service set, not read.
+get_prop(hal_misys_vendor, boot_status_prop)
+
+# ModuleManager also reads default_prop and is denied. Left denied on purpose:
+# default_prop is the catch-all for properties with no property_contexts entry
+# (system_internal_prop, system/sepolicy/public/property.te), and Treble's sysprop
+# ownership neverallow forbids a vendor domain reading it - granting it fails the
+# build. The properties involved are diagnostics only (persist.bsp.logmgr.disable,
+# persist.sys.abreuse.abstatus, minidump/ramdump/blackbox boot counters), none of
+# them on the watermark path.

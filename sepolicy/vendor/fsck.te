@@ -1,0 +1,7 @@
+# Suppress: fsck tries to read/write unlabeled block devices (sda29/rescue)
+# Cannot use allow due to neverallow in system/sepolicy/private/domain.te:744
+# This is non-critical — rescue partition fsck failure doesn't affect boot
+dontaudit fsck block_device:blk_file rw_file_perms;
+
+# Suppress: fsck.f2fs reads sysfs partition attributes
+dontaudit fsck sysfs:file getattr;

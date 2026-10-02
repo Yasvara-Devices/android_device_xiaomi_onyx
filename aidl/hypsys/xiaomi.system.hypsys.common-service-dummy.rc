@@ -1,0 +1,8 @@
+service xiaomi.system.hypsys.common-service /vendor/bin/hw/xiaomi.system.hypsys.common-service-dummy
+    user system
+    group system
+    interface aidl xiaomi.system.hypsys.common.IHypSysSsi/default
+    interface aidl xiaomi.system.hypsys.common.IHypSysSsiIntl/default
+    disabled
+    oneshot
+

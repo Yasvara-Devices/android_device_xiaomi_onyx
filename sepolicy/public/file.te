@@ -1,0 +1,4 @@
+# Wake gesture arming nodes on the Xiaomi touch device. Declared system_ext
+# public so the vendor genfs rules can label them and parts_app (private) can
+# write them.
+type sysfs_wake_gesture, fs_type, sysfs_type;

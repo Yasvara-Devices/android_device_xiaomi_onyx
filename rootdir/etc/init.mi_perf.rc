@@ -1,0 +1,103 @@
+#
+# SPDX-FileCopyrightText: Paranoid Android
+# SPDX-License-Identifier: Apache-2.0
+#
+
+on init
+    copy_per_line /dev/cpuctl/tasks /dev/cpuctl/system/tasks
+
+on post-fs
+    # 12GB RAM device — generous heap to minimize GC pauses
+    setprop dalvik.vm.heapstartsize 24m
+    setprop dalvik.vm.heapgrowthlimit 512m
+    setprop dalvik.vm.heapsize 768m
+    setprop dalvik.vm.heaptargetutilization 0.46
+    setprop dalvik.vm.heapminfree 8m
+    setprop dalvik.vm.heapmaxfree 48m
+
+on boot
+    chown system system /dev/cpuset/cgroup.procs
+    chown system system /dev/cpuset/foreground/cgroup.procs
+    chown system system /dev/cpuset/background/cgroup.procs
+    chown system system /dev/cpuset/system-background/cgroup.procs
+    chown system system /dev/cpuset/top-app/cgroup.procs
+
+    chmod 0666 /dev/cpuset/foreground/cgroup.procs
+    chmod 0666 /dev/cpuset/background/cgroup.procs
+    chmod 0666 /dev/cpuset/system-background/cgroup.procs
+    chmod 0666 /dev/cpuset/top-app/cgroup.procs
+    chmod 0666 /dev/cpuset/cgroup.procs
+
+    chown system system /dev/stune/background/cgroup.procs
+    chown system system /dev/stune/top-app/cgroup.procs
+    chmod 0666 /dev/stune/background/cgroup.procs
+    chmod 0666 /dev/stune/top-app/cgroup.procs
+
+# Migrate tasks again in case kernel threads are created during boot
+on property:sys.boot_completed=1
+    copy_per_line /dev/cpuctl/tasks /dev/cpuctl/system/tasks
+
+    # Configure uclamp
+    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
+    # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
+    write /dev/cpuctl/background/cpu.shares 1024
+    write /dev/cpuctl/system-background/cpu.shares 1024
+    write /dev/cpuctl/dex2oat/cpu.shares 512
+    write /dev/cpuctl/system/cpu.shares 20480
+    # We only have system and background groups holding tasks and the groups below are empty
+    write /dev/cpuctl/camera-daemon/cpu.shares 20480
+    write /dev/cpuctl/foreground/cpu.shares 20480
+    write /dev/cpuctl/nnapi-hal/cpu.shares 20480
+    write /dev/cpuctl/rt/cpu.shares 20480
+    write /dev/cpuctl/top-app/cpu.shares 20480
+
+    # Uclamp tunings
+    write /proc/sys/kernel/sched_util_clamp_min_rt_default 500
+
+    #top-app — max priority, fast CPU ramp-up
+    write /dev/cpuctl/top-app/cpu.uclamp.max max
+    write /dev/cpuctl/top-app/cpu.uclamp.min 20
+    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
+
+    #foreground — high priority, latency sensitive for smooth UI
+    write /dev/cpuctl/foreground/cpu.uclamp.max 80
+    write /dev/cpuctl/foreground/cpu.uclamp.min 20
+    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 1
+
+    #background — limit to prevent stealing from foreground
+    write /dev/cpuctl/background/cpu.uclamp.max 50
+    write /dev/cpuctl/background/cpu.uclamp.min 0
+    write /dev/cpuctl/background/cpu.uclamp.latency_sensitive 0
+
+    #system-background
+    write /dev/cpuctl/system-background/cpu.uclamp.max 40
+    write /dev/cpuctl/system-background/cpu.uclamp.min 0
+    write /dev/cpuctl/system-background/cpu.uclamp.latency_sensitive 0
+
+    # VM tuning for 12GB RAM — reduce swap pressure, keep app caches
+    write /proc/sys/vm/swappiness 60
+    write /proc/sys/vm/vfs_cache_pressure 50
+    write /proc/sys/vm/dirty_ratio 30
+    write /proc/sys/vm/dirty_background_ratio 10
+
+    # UFS: reduce read-ahead for random I/O (EROFS blocks are small)
+    write /sys/block/sda/queue/read_ahead_kb 128
+
+    #nnapi-hal
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.max max
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 75
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.latency_sensitive 1
+
+    #camera-daemon
+    write /dev/cpuctl/camera-daemon/cpu.uclamp.max max
+    write /dev/cpuctl/camera-daemon/cpu.uclamp.min 50
+    write /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive 1
+
+    # Aggressive Doze — enter deep idle faster, longer idle cycles
+    # FCM high-priority (WhatsApp, calls) still delivers instantly
+    settings put global device_idle_constants inactive_to=900000,light_after_inactive_to=180000,light_idle_to=180000,light_max_idle_to=600000,sensing_to=120000,locating_to=15000,idle_after_inactive_to=900000,idle_to=1800000,idle_factor=2.5,max_idle_to=21600000,quick_doze_delay_to=30000
+
+    # Disable WiFi/BLE background scanning — saves 3-5% battery/day
+    # User can re-enable in Settings → Location → Wi-Fi/BT scanning
+    settings put global wifi_scan_always_enabled 0
+    settings put global ble_scan_always_enabled 0
