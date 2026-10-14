@@ -375,6 +375,12 @@ blob_fixups: blob_fixups_user_type = {
             r'<screenBrightnessRampDecreaseMaxMillis>5000</screenBrightnessRampDecreaseMaxMillis>',
         ),
 
+    # A17 libbinder reads boot_id through an ifstream (lseek) when ProcessState
+    # starts; exit_group keeps a failed init a clean exit instead of SIGSYS.
+    'vendor/etc/seccomp_policy/qesdksec.policy': blob_fixup()
+        .add_line_if_missing('lseek: 1')
+        .add_line_if_missing('exit_group: 1'),
+
     'vendor/etc/sensors/hals.conf': blob_fixup()
         .regex_replace('.*vl53l8.*\n?', ''),
 
