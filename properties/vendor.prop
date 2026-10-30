@@ -383,7 +383,7 @@ ro.vendor.beluga.t=0x240
 # Perf
 ro.vendor.extension_library=libqti-perfd-client.so
 ro.vendor.perf-hal.ver=3.0
-ro.vendor.perf.scroll_opt=1
+ro.vendor.perf.scroll_opt=false
 vendor.pasr.activemode.enabled=true
 vendor.perf.framepacing.enable=1
 vendor.power.pasr.enabled=true
@@ -469,9 +469,6 @@ persist.vendor.radio.data_con_rprt_1=1
 persist.vendor.radio.dynamic_sar_0=1
 persist.vendor.radio.dynamic_sar_1=1
 
-# ScrollOptimizer
-persist.sys.perf.scroll_opt=true
-persist.sys.perf.scroll_opt.heavy_app=1
 
 # Bluetooth High-Res Audio Master Optimization (LDAC 990kbps, AptX Lossless, LHDC v5)
 persist.vendor.btstack.enable_lhdcv5=true
