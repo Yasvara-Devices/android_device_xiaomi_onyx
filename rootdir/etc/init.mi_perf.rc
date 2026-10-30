@@ -93,11 +93,3 @@ on property:sys.boot_completed=1
     write /dev/cpuctl/camera-daemon/cpu.uclamp.min 50
     write /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive 1
 
-    # Aggressive Doze — enter deep idle faster, longer idle cycles
-    # FCM high-priority (WhatsApp, calls) still delivers instantly
-    settings put global device_idle_constants inactive_to=900000,light_after_inactive_to=180000,light_idle_to=180000,light_max_idle_to=600000,sensing_to=120000,locating_to=15000,idle_after_inactive_to=900000,idle_to=1800000,idle_factor=2.5,max_idle_to=21600000,quick_doze_delay_to=30000
-
-    # Disable WiFi/BLE background scanning — saves 3-5% battery/day
-    # User can re-enable in Settings → Location → Wi-Fi/BT scanning
-    settings put global wifi_scan_always_enabled 0
-    settings put global ble_scan_always_enabled 0
