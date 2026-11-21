@@ -6,6 +6,9 @@
 <resources>
     <!-- Doze: does this device support STATE_DOZE?  -->
     <bool name="doze_display_state_supported">true</bool>
+    <!-- Screen-off fingerprint: keep the panel in doze; the udfps handler raises the AOD
+         brightness state so local HBM uses its doze command. -->
+    <bool name="config_udfpsScreenOffPulseInDoze">true</bool>
 
     <!-- Should we vibrate on an icon animation of the shelf. This should only be active if the
      vibrator is capable of subtle vibrations -->
@@ -14,14 +17,14 @@
     <!-- Preferred refresh rate at keyguard, if supported by the display. Overrides
          keyguardMaxRefreshRate.
          MUST be a rate that actually exists in qcom,dsi-supported-dfps-list
-         (OC 135/90/60). Matching the top rate means
+         (120/90/60). Matching the top rate means
          lock/unlock is not a transition at all. -->
-    <integer name="config_keyguardRefreshRate">135</integer>
+    <integer name="config_keyguardRefreshRate">120</integer>
 
     <!-- Preferred max refresh rate at keyguard, if supported by the display.
          Overridden by config_keyguardRefreshRate above; kept in sync so it
          cannot reintroduce a switch if that one is ever set to 0. -->
-    <integer name="config_keyguardMaxRefreshRate">135</integer>
+    <integer name="config_keyguardMaxRefreshRate">120</integer>
 
     <!-- Whether to play turbulence noise after clicking the play button -->
     <bool name="config_turbulenceNoise">false</bool>
@@ -32,5 +35,15 @@
     <!-- Override GMS overlay: clear hardcoded Google Markup (not installed).
          Empty = falls back to system chooser → Google Photos editor works. -->
     <string name="config_screenshotEditor" translatable="false"></string>
+
+    <!-- Rekam: its projection shows as a recording, and its tile replaces the stock
+         screen-record tile. -->
+    <string name="config_screenRecorderPackage" translatable="false">org.yasvara.rekam</string>
+    <string name="quick_settings_tiles_default" translatable="false">
+        internet,bt,dnd,cast,flashlight,airplane,rotation,wallet,alarm,controls,custom(org.yasvara.rekam/.ui.RekamTileService),battery
+    </string>
+    <string name="quick_settings_tiles_default_split" translatable="false">
+        wifi,bt,cell,cast,dnd,wallet,airplane,rotation,flashlight,battery,alarm,controls,custom(org.yasvara.rekam/.ui.RekamTileService)
+    </string>
 
 </resources>
