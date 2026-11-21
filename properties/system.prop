@@ -11,6 +11,10 @@ persist.backup.ntpServer=0.pool.ntp.org
 debug.hwui.skia_tracing_enabled=false
 debug.hwui.skia_use_perfetto_track_events=false
 
+# The top app's UI thread and RenderThread run SCHED_FIFO, so background work
+# (codec threads at nice -16, task snapshots) cannot preempt a frame.
+sys.use_fifo_ui=1
+
 # Media
 media.stagefright.thumbnail.prefer_hw_codecs=true
 ro.mediaserver.64b.enable=true
@@ -29,6 +33,15 @@ telephony.lteOnCdmaDevice=1
 persist.radio.is_vonr_enabled_0=true
 persist.radio.is_vonr_enabled_1=true
 persist.vendor.vonr_setting_support=1
+
+# Radio IMS (VoLTE / ViLTE / VoWiFi) global platform availability unlock
+persist.dbg.ims_volte_enable=1
+persist.dbg.volte_avail_ovr=1
+persist.dbg.vt_avail_ovr=1
+persist.dbg.wfc_avail_ovr=1
+
+# Bypass carrier tethering/hotspot entitlement provisioning checks
+net.tethering.noprovisioning=true
 
 # WFD
 persist.debug.wfd.enable=1
@@ -86,4 +99,5 @@ persist.log.tag.AuthService=WARN
 persist.log.tag.VendorTagDescriptor=WARN
 persist.log.tag.SensorPowerStatsLayout=WARN
 
-
+# Display
+ro.yasvara.display.perceptual_ramp=true

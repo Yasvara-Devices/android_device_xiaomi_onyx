@@ -3003,18 +3003,18 @@
     <!-- end CarrierConfigResCommon_Sys res/xml/vendor.xml -->
     <!-- start CarrierConfig res/xml/vendor_miui.xml -->
     <carrier_config>
-        <boolean name="carrier_volte_available_bool" value="false" />
-        <boolean name="carrier_vt_available_bool" value="false" />
+        <!-- <boolean name="carrier_volte_available_bool" value="false" /> (Disabled global kill-switch: wiped 151+ carriers above & blocked unlisted SIMs) -->
+        <!-- <boolean name="carrier_vt_available_bool" value="false" /> (Disabled global kill-switch: blocked ViLTE on unlisted SIMs) -->
         <boolean name="config_enable_vt_with_mobile_data_off" value="true" />
         <boolean name="ignore_data_enabled_changed_for_video_calls" value="true" />
-        <boolean name="carrier_wfc_ims_available_bool" value="false" />
+        <!-- <boolean name="carrier_wfc_ims_available_bool" value="false" /> (Disabled global kill-switch: wiped 146+ carriers above & AOSP assets) -->
         <boolean name="editable_wfc_mode_bool" value="true" />
         <boolean name="allow_adding_apns_bool" value="true" />
         <boolean name="config_power_center_5g_save_mode" value="true" />
         <boolean name="carrier_fiveg_power_saving_available_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="false" />
         <boolean name="carrier_disable_sa_mode_bool" value="true" />
-        <boolean name="carrier_wfc_supports_ims_preferred_bool" value="false" />
+        <!-- <boolean name="carrier_wfc_supports_ims_preferred_bool" value="false" /> (Disabled global reset: handled by Global Carrier Unlock block) -->
         <boolean name="hide_xcap_apn_bool" value="true" />
         <boolean name="config_hide_dun_apn" value="false" />
         <boolean name="hide_emergency_apn_bool" value="true" />
@@ -3059,11 +3059,11 @@
         <boolean name="config_smsc_no_need_show_international_number" value="false" />
         <boolean name="config_miui_sms_optimization" value="false" />
         <boolean name="config_miui_sms_sa_fallback_optimization" value="false" />
-        <boolean name="carrier_allow_transfer_ims_call_bool" value="false" />
+        <!-- <boolean name="carrier_allow_transfer_ims_call_bool" value="false" /> (Disabled global reset: wiped CarrierConfigResCommon_Sys true) -->
         <boolean name="carrier_allow_transfer_gsm_call_bool" value="false" />
         <boolean name="config_call_forwarding_CFNRc_visibility_bool" value="true" />
         <boolean name="config_wfc_disable_sa" value="false" />
-        <boolean name="vonr_enabled_bool" value="false" />
+        <!-- <boolean name="vonr_enabled_bool" value="false" /> (Disabled global kill-switch: caused GsmCdmaPhone.updateVoNrSettings() to force modem VoNR OFF) -->
         <boolean name="config_update_service_status" value="false" />
         <boolean name="config_update_multiparty_state" value="true" />
         <boolean name="config_support_callbarring_cancel_all_by_sequence" value="true" />
@@ -3075,13 +3075,13 @@
         <boolean name="carrier_volte_globalization_enable" value="false" />
         <boolean name="config_show_vonr_icon_in_statusbar" value="false" />
         <boolean name="carrier_disable_vice_sa_mode_bool" value="true" />
-        <boolean name="hide_enable_2g_bool" value="true" />
+        <!-- <boolean name="hide_enable_2g_bool" value="true" /> (Deprecated & ignored since Android V (CarrierConfigManager.java:11098)) -->
         <boolean name="disable_filter_out_conference_host" value="false" />
         <boolean name="config_satellite_support" value="false" />
         <boolean name="config_satellite_xingwang_support" value="false" />
         <boolean name="extra_show_roaming_wfc_mode_option" value="false" />
         <boolean name="update_kddi_call_address" value="false" />
-        <boolean name="vonr_setting_visibility_bool" value="false" />
+        <!-- <boolean name="vonr_setting_visibility_bool" value="false" /> (Disabled global kill-switch: hid VoNR toggle in Settings) -->
         <boolean name="config_beidou_support" value="false" />
         <boolean name="carrier_disable_network_identified_emergency_call" value="true" />
         <int name="call_barring_default_service_class_int" value="0" />
@@ -13493,53 +13493,53 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="424" mnc="2">
+    <carrier_config mcc="424" mnc="02">
         <boolean name="config_show_vonr_icon_in_statusbar" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="424" mnc="3">
+    <carrier_config mcc="424" mnc="03">
         <boolean name="config_show_vonr_icon_in_statusbar" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="257" mnc="1">
+    <carrier_config mcc="257" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="262" mnc="3">
+    <carrier_config mcc="262" mnc="03">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="262" mnc="7">
+    <carrier_config mcc="262" mnc="07">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
     <carrier_config mcc="262" mnc="11">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="401" mnc="1">
+    <carrier_config mcc="401" mnc="01">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="470" mnc="3">
+    <carrier_config mcc="470" mnc="03">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="457" mnc="7">
+    <carrier_config mcc="457" mnc="07">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="0">
+    <carrier_config mcc="454" mnc="00">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="2">
+    <carrier_config mcc="454" mnc="02">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
     </carrier_config>
@@ -13574,13 +13574,13 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_vt_available_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="724" mnc="2">
+    <carrier_config mcc="724" mnc="02">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="724" mnc="3">
+    <carrier_config mcc="724" mnc="03">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="724" mnc="4">
+    <carrier_config mcc="724" mnc="04">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
     <carrier_config mcc="724" mnc="29">
@@ -13596,10 +13596,10 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="434" mnc="5">
+    <carrier_config mcc="434" mnc="05">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="724" mnc="6">
+    <carrier_config mcc="724" mnc="06">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
     <carrier_config mcc="724" mnc="10">
@@ -13615,77 +13615,77 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="400" mnc="1">
+    <carrier_config mcc="400" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="214" mnc="3">
+    <carrier_config mcc="214" mnc="03">
         <boolean name="carrier_disable_sa_mode_bool" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="hide_enhanced_4g_lte_bool" value="true" />
         <boolean name="editable_enhanced_4g_lte_bool" value="false" />
         <boolean name="enhanced_4g_lte_on_by_default_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="214" mnc="3" spn="Orange">
+    <carrier_config mcc="214" mnc="03" spn="Orange">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="carrier_sa_mode_available_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="214" mnc="4">
+    <carrier_config mcc="214" mnc="04">
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="214" mnc="7">
+    <carrier_config mcc="214" mnc="07">
         <boolean name="config_wfc_disable_sa" value="true" />
     </carrier_config>
-    <carrier_config mcc="400" mnc="2">
+    <carrier_config mcc="400" mnc="02">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="410" mnc="1">
-        <boolean name="carrier_wfc_ims_available_bool" value="true" />
-        <boolean name="carrier_vt_available_bool" value="true" />
-    </carrier_config>
-    <carrier_config mcc="410" mnc="7">
+    <carrier_config mcc="410" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="639" mnc="2">
+    <carrier_config mcc="410" mnc="07">
+        <boolean name="carrier_wfc_ims_available_bool" value="true" />
+        <boolean name="carrier_vt_available_bool" value="true" />
+    </carrier_config>
+    <carrier_config mcc="639" mnc="02">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="419" mnc="2">
+    <carrier_config mcc="419" mnc="02">
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="413" mnc="5">
+    <carrier_config mcc="413" mnc="05">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="413" mnc="8">
+    <carrier_config mcc="413" mnc="08">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="410" mnc="6">
+    <carrier_config mcc="410" mnc="06">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="234" mnc="10">
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="283" mnc="5">
+    <carrier_config mcc="283" mnc="05">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="3">
+    <carrier_config mcc="454" mnc="03">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="4">
+    <carrier_config mcc="454" mnc="04">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="5">
+    <carrier_config mcc="454" mnc="05">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="454" mnc="14">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="6">
+    <carrier_config mcc="454" mnc="06">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="454" mnc="15">
@@ -13694,10 +13694,10 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
     <carrier_config mcc="454" mnc="17">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="454" mnc="7">
+    <carrier_config mcc="454" mnc="07">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="410" mnc="4">
+    <carrier_config mcc="410" mnc="04">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="502" mnc="18">
@@ -13726,7 +13726,7 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
     <carrier_config mcc="520" mnc="04">
         <boolean name="carrier_disable_sa_mode_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="525" mnc="5">
+    <carrier_config mcc="525" mnc="05">
         <boolean name="vonr_enabled_bool" value="true" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
     </carrier_config>
@@ -13735,13 +13735,13 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="452" mnc="4">
+    <carrier_config mcc="452" mnc="04">
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="724" mnc="5">
+    <carrier_config mcc="724" mnc="05">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
     <carrier_config mcc="732" mnc="103">
@@ -13754,27 +13754,27 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="enhanced_4g_lte_on_by_default_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="602" mnc="4">
+    <carrier_config mcc="602" mnc="04">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="602" mnc="1">
+    <carrier_config mcc="602" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="604" mnc="1">
+    <carrier_config mcc="604" mnc="01">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="244" mnc="5">
+    <carrier_config mcc="244" mnc="05">
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="262" mnc="2">
+    <carrier_config mcc="262" mnc="02">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="262" mnc="9">
+    <carrier_config mcc="262" mnc="09">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="202" mnc="1">
+    <carrier_config mcc="202" mnc="01">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
     <carrier_config mcc="228" mnc="71">
@@ -13789,20 +13789,20 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
     <carrier_config mcc="242" mnc="23">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="247" mnc="1">
+    <carrier_config mcc="247" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="268" mnc="6">
+    <carrier_config mcc="268" mnc="06">
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="268" mnc="2">
+    <carrier_config mcc="268" mnc="02">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="437" mnc="1">
+    <carrier_config mcc="437" mnc="01">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
@@ -13815,13 +13815,13 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="515" mnc="3">
+    <carrier_config mcc="515" mnc="03">
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="416" mnc="1">
+    <carrier_config mcc="416" mnc="01">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="414" mnc="5">
+    <carrier_config mcc="414" mnc="05">
         <boolean name="carrier_vt_available_bool" value="true" />
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
@@ -13829,7 +13829,7 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="222" mnc="1">
+    <carrier_config mcc="222" mnc="01">
         <boolean name="config_restore_participants_presentation" value="false" />
     </carrier_config>
     <carrier_config mcc="222" mnc="88">
@@ -13858,27 +13858,27 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="429" mnc="2">
+    <carrier_config mcc="429" mnc="02">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="655" mnc="7">
+    <carrier_config mcc="655" mnc="07">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="655" mnc="8">
+    <carrier_config mcc="655" mnc="08">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="434" mnc="4">
+    <carrier_config mcc="434" mnc="04">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="429" mnc="1">
+    <carrier_config mcc="429" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <int name="carrier_default_wfc_ims_mode_int" value="10" />
         <boolean name="carrier_wfc_supports_ims_preferred_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="712" mnc="4">
+    <carrier_config mcc="712" mnc="04">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
@@ -13887,7 +13887,7 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="248" mnc="2">
+    <carrier_config mcc="248" mnc="02">
         <boolean name="config_show_vonr_icon_in_statusbar" value="true" />
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
@@ -13901,7 +13901,7 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_sa_mode_available_bool" value="true" />
         <boolean name="carrier_disable_sa_mode_bool" value="false" />
     </carrier_config>
-    <carrier_config mcc="288" mnc="1">
+    <carrier_config mcc="288" mnc="01">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
         <boolean name="carrier_vt_available_bool" value="true" />
         <boolean name="carrier_volte_available_bool" value="true" />
@@ -13910,29 +13910,29 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="276" mnc="1">
+    <carrier_config mcc="276" mnc="01">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="268" mnc="4">
+    <carrier_config mcc="268" mnc="04">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="255" mnc="3">
+    <carrier_config mcc="255" mnc="03">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="282" mnc="2">
+    <carrier_config mcc="282" mnc="02">
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="214" mnc="14">
         <boolean name="carrier_volte_available_bool" value="true" />
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="470" mnc="1">
+    <carrier_config mcc="470" mnc="01">
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="470" mnc="2">
+    <carrier_config mcc="470" mnc="02">
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="470" mnc="7">
+    <carrier_config mcc="470" mnc="07">
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="412" mnc="50">
@@ -14034,17 +14034,17 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="515" mnc="2">
+    <carrier_config mcc="515" mnc="02">
         <boolean name="carrier_vt_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="530" mnc="1">
+    <carrier_config mcc="530" mnc="01">
         <boolean name="carrier_vt_available_bool" value="true" />
         <boolean name="carrier_volte_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="452" mnc="2">
+    <carrier_config mcc="452" mnc="02">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="410" mnc="3">
+    <carrier_config mcc="410" mnc="03">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="404" mnc="02">
@@ -14208,11 +14208,146 @@ filtering rules are the same as those in carrier_config*.xml_utils files. This
         <boolean name="config_show_vonr_icon_in_statusbar" value="true" />
         <boolean name="vonr_enabled_bool" value="true" />
     </carrier_config>
-    <carrier_config mcc="401" mnc="7">
+    <carrier_config mcc="401" mnc="07">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <carrier_config mcc="401" mnc="77">
         <boolean name="carrier_wfc_ims_available_bool" value="true" />
     </carrier_config>
     <!-- end MiuiCarrierConfigOverlay res/xml/vendor_device.xml -->
+    <!-- start Yasvara Global SIM & Carrier Unlock (VoWiFi / VoLTE / ViLTE / VoNR / 5G SA+NSA / Cross-SIM / Tethering / APN) -->
+    <!--
+         Applied last by DefaultCarrierConfigService so all SIMs worldwide (including unlisted MVNOs
+         and regional carriers) receive full platform, IMS, 5G, APN, and tethering capabilities.
+
+         Intentionally NOT globally overridden (traps / trade-offs / dead keys):
+         - world_phone_bool / show_cdma_choices_bool: exposes obsolete CDMA UI on GSM/LTE/5G SIMs.
+         - carrier_default_data_roaming_enabled_bool: risk of unintended roaming charges.
+         - carrier_default_wfc_ims_enabled_bool: kept unset here so 315 verified VoWiFi carriers keep
+           auto-ON while unlisted/no-ePDG SIMs (e.g. ePDG DNS = 127.0.0.1) default to opt-in toggle
+           visible without idle IKEv2 retry battery drain.
+         - hide_enabled_5g_bool: kept AOSP default (true); Preferred Network Type already switches 5G/4G/3G/2G
+           and avoids an unstyled legacy SwitchPreference with no android:order.
+         - hide_enable_2g_bool: @Deprecated & no-op in Android V+ (CarrierConfigManager.java:11098).
+         - carrier_rcs_provisioning_required_bool / use_acs_for_rcs_bool: managed by Google Jibe RCS.
+         - ~170 MIUI/MTK-only keys in upstream HyperOS dump (carrier_disable_5g_switch_bool,
+           carrier_sa_mode_available_bool, hide_wfc_mode_option, mtk_*, etc.): never read by AOSP/QTI.
+    -->
+    <carrier_config>
+        <!-- 1. VoWiFi / IWLAN / Cross-SIM (Backup Calling) -->
+        <boolean name="carrier_wfc_ims_available_bool" value="true" />
+        <boolean name="carrier_cross_sim_ims_available_bool" value="true" />
+        <boolean name="enable_cross_sim_calling_on_opportunistic_data_bool" value="true" />
+        <boolean name="editable_wfc_mode_bool" value="true" />
+        <boolean name="editable_wfc_roaming_mode_bool" value="true" />
+        <boolean name="carrier_wfc_supports_wifi_only_bool" value="true" />
+        <boolean name="carrier_wfc_supports_ims_preferred_bool" value="true" />
+        <int name="carrier_default_wfc_ims_mode_int" value="2" />
+        <int name="carrier_default_wfc_ims_roaming_mode_int" value="2" />
+        <boolean name="carrier_default_wfc_ims_roaming_enabled_bool" value="true" />
+        <boolean name="use_wfc_home_network_mode_in_roaming_network_bool" value="false" />
+        <boolean name="vowifi_call_quality" value="true" />
+        <boolean name="auto_retry_failed_wifi_emergency_call" value="true" />
+
+        <!-- 2. VoLTE / ViLTE / VoNR (5G Standalone Voice) -->
+        <boolean name="carrier_volte_available_bool" value="true" />
+        <boolean name="enhanced_4g_lte_on_by_default_bool" value="true" />
+        <boolean name="hide_enhanced_4g_lte_bool" value="false" />
+        <boolean name="editable_enhanced_4g_lte_bool" value="true" />
+        <boolean name="carrier_vt_available_bool" value="true" />
+        <boolean name="ignore_data_enabled_changed_for_video_calls" value="true" />
+        <boolean name="vonr_enabled_bool" value="true" />
+        <boolean name="vonr_on_by_default_bool" value="true" />
+        <boolean name="vonr_setting_visibility_bool" value="true" />
+
+        <!-- 3. Bypass IMS Provisioning / GBA / Entitlement Lockouts -->
+        <boolean name="carrier_volte_provisioning_required_bool" value="false" />
+        <boolean name="carrier_volte_override_wfc_provisioning_bool" value="false" />
+        <boolean name="carrier_ims_gba_required_bool" value="false" />
+        <boolean name="carrier_ut_provisioning_required_bool" value="false" />
+        <boolean name="imsserviceentitlement.ims_provisioning_bool" value="false" />
+        <boolean name="imsserviceentitlement.show_vowifi_webview_bool" value="false" />
+        <boolean name="imsserviceentitlement.skip_wfc_activation_bool" value="true" />
+
+        <!-- 4. 5G NR (NSA + SA) & Network Selection Unlock -->
+        <int-array name="carrier_nr_availabilities_int_array" num="2">
+            <item value="1" />
+            <item value="2" />
+        </int-array>
+        <int name="ims.sa_disable_policy_int" value="0" />
+        <boolean name="lte_enabled_bool" value="true" />
+        <boolean name="hide_preferred_network_type_bool" value="false" />
+        <boolean name="hide_carrier_network_settings_bool" value="false" />
+        <boolean name="operator_selection_expand_bool" value="true" />
+        <boolean name="only_auto_select_in_home_network" value="false" />
+        <boolean name="csp_enabled_bool" value="false" />
+        <boolean name="prefer_3g_visibility_bool" value="true" />
+        <boolean name="hide_sim_lock_settings_bool" value="false" />
+        <boolean name="hide_radio_info_on_user_build_bool" value="false" />
+
+        <!-- 5. Tethering / Hotspot Entitlement Unlock -->
+        <boolean name="carrier_supports_tethering_bool" value="true" />
+        <boolean name="require_entitlement_checks_bool" value="false" />
+
+        <!-- 6. Full APN Unlock (including IMS & DUN) & Fast Reconnect -->
+        <boolean name="apn_expand_bool" value="true" />
+        <boolean name="allow_adding_apns_bool" value="true" />
+        <boolean name="hide_ims_apn_bool" value="false" />
+        <boolean name="hide_preset_apn_details_bool" value="false" />
+        <boolean name="show_apn_setting_cdma_bool" value="true" />
+        <string-array name="read_only_apn_types_string_array" num="0" />
+        <string-array name="read_only_apn_fields_string_array" num="0" />
+        <string-array name="disallow_adding_apn_string_array" num="0" />
+        <boolean name="use_default_ims_apn_when_absent_bool" value="true" />
+        <string name="apn.settings_default_protocol_string">IPV4V6</string>
+        <string name="apn.settings_default_roaming_protocol_string">IPV4V6</string>
+        <long name="carrier_data_call_apn_retry_after_disconnect_long" value="1000" />
+
+        <!-- 7. IMS Calling, Supplementary Services (UT w/ CSFB fallback) & HD Audio -->
+        <boolean name="carrier_supports_ss_over_ut_bool" value="true" />
+        <boolean name="imsss.use_csfb_on_xcap_over_ut_failure_bool" value="true" />
+        <boolean name="carrier_allow_transfer_ims_call_bool" value="true" />
+        <boolean name="carrier_allow_deflect_ims_call_bool" value="true" />
+        <boolean name="support_conference_call_bool" value="true" />
+        <boolean name="support_ims_conference_call_bool" value="true" />
+        <boolean name="support_manage_ims_conference_call_bool" value="true" />
+        <boolean name="support_add_conference_participants_bool" value="true" />
+        <boolean name="support_adhoc_conference_calls_bool" value="true" />
+        <boolean name="support_video_conference_call_bool" value="true" />
+        <boolean name="allow_hold_in_ims_call" value="true" />
+        <boolean name="allow_add_call_during_video_call" value="true" />
+        <boolean name="allow_hold_video_call_bool" value="true" />
+        <boolean name="support_pause_ims_video_calls_bool" value="true" />
+        <boolean name="allow_merge_wifi_calls_when_vowifi_off_bool" value="true" />
+        <boolean name="display_hd_audio_property_bool" value="true" />
+        <boolean name="wifi_calls_can_be_hd_audio" value="true" />
+        <boolean name="video_calls_can_be_hd_audio" value="true" />
+        <boolean name="allow_ussd_requests_via_telephony_manager_bool" value="true" />
+        <boolean name="call_forwarding_visibility_bool" value="true" />
+        <boolean name="call_barring_visibility_bool" value="true" />
+        <boolean name="support_3gpp_call_forwarding_while_roaming_bool" value="true" />
+        <boolean name="support_ims_call_forwarding_while_roaming_bool" value="true" />
+        <boolean name="editable_voicemail_number_setting_bool" value="true" />
+        <boolean name="hide_voicemail_number_setting_bool" value="false" />
+        <boolean name="imsvoice.carrier_volte_roaming_available_bool" value="true" />
+        <boolean name="imssms.sms_over_ims_supported_bool" value="true" />
+        <boolean name="imssms.sms_csfb_retry_on_failure_bool" value="true" />
+
+        <!-- 8. SIM Status Diagnostics & Carrier Aggregation (4G+/5G+) Icons -->
+        <boolean name="show_ims_registration_status_bool" value="true" />
+        <boolean name="show_iccid_in_sim_status_bool" value="true" />
+        <boolean name="show_carrier_id_in_sim_status_bool" value="true" />
+        <boolean name="hide_lte_plus_data_icon_bool" value="false" />
+        <boolean name="enable_nr_advanced_for_roaming_bool" value="true" />
+    </carrier_config>
+    <!-- Bangladesh (MCC 470) verified live-ePDG carriers: auto-enable VoWiFi by default -->
+    <!-- Grameenphone (470-01): ePDG 123.108.240.250/.251, MBN Grameen-BD IWLAN enabled -->
+    <carrier_config mcc="470" mnc="01">
+        <boolean name="carrier_default_wfc_ims_enabled_bool" value="true" />
+    </carrier_config>
+    <!-- Banglalink (470-03): ePDG 116.58.207.151/.55, MBN banglalink-BD IWLAN enabled -->
+    <carrier_config mcc="470" mnc="03">
+        <boolean name="carrier_default_wfc_ims_enabled_bool" value="true" />
+    </carrier_config>
+    <!-- end Yasvara Global SIM & Carrier Unlock -->
 </carrier_config_list>

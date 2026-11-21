@@ -118,13 +118,16 @@ ro.vendor.sre.enable=true
 
 # Graphics
 debug.sf.set_idle_timer_ms=1100
-ro.surface_flinger.enable_frame_rate_override=false
+# Yasvara Layang (SPEC-0008 §5.2, D13): per-uid frame-rate override caps a game in a
+# mini window at 30 fps. Spike S5: if the display stack (DPPS, idle timer) misbehaves,
+# set this back to false; mini games then simply run uncapped.
+ro.surface_flinger.enable_frame_rate_override=true
 vendor.display.boost_cpu_layer_number_threshold=12
 vendor.display.disable_3d_adaptive_tm=1
 vendor.display.disable_cwb_idle_fallback=1
 vendor.display.disable_idle_scaling_layers=1
 vendor.display.disable_llcc_during_aod=1
-vendor.display.disable_sdr_dimming=1
+vendor.display.disable_sdr_dimming=0
 vendor.display.disable_stc_dimming=1
 vendor.display.enable_antiaging=0
 # Do not set to 0 to quiet logs: this notifier is what drives the ALS update rate.
@@ -143,7 +146,7 @@ ro.vendor.qti.va_odm.support=1
 
 # RIL
 ro.telephony.default_network=33,33
-persist.vendor.radio.dynamic_sar=1
+persist.vendor.radio.dynamic_sar=0
 
 # Sensor
 persist.vendor.sensors.debug.hal_trigger_crash=true
@@ -157,6 +160,9 @@ persist.vendor.tracking.dfs=true
 # Touchfeature
 persist.vendor.touchfeature.gameturbotool.version=v4
 ro.vendor.touch.touchscheduler.enable=true
+# THP water rejection flaps on a dry panel and drops held fingers. The HAL
+# only parses true/false here; its own mode-100 setter writes 0/1.
+persist.vendor.hostprocess.waterproof=false
 
 # SKU
 import /odm/etc/odm_${ro.boot.hwc}.prop
