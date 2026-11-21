@@ -44,6 +44,9 @@ PRODUCT_PACKAGES += \
     checkpoint_gc \
     otapreopt_script
 
+# AFDO profiles from onyx ETE traces
+-include vendor/yasvara/afdo/onyx/afdo_profiles.mk
+
 # API
 BOARD_SHIPPING_API_LEVEL := 202404
 PRODUCT_SHIPPING_API_LEVEL := 35
@@ -113,12 +116,9 @@ PRODUCT_PACKAGES += \
     libcodec2_hidl@1.2.vendor \
     libcodec2_soft_common.vendor
 
-# Dolby — full native AIDL/DAX3 stack (libs deeply coupled via dependency chain):
-# codec → libdmshal.so → libdapparamstorage.so + vendor.dolby.dms/hardware IPC.
-# DMS SERVICE DAEMON (vendor.dolby.dms.service) IS now installed below — it is the
-# param backend for the DAP effect; without it the effect no-ops/mutes ("Dolby audio
-# loss"). The daemon is gated by persist.sys.lunaris.dolby.backend (default: aidl) so
-# it only runs when the native backend is active (see dolby/dms-service.rc).
+# Dolby: the native AIDL DAX3 stack from the stock blobs. The DAP runs on the audio DSP; the
+# effect library only carries parameters, and vendor.dolby.dms.service is its parameter
+# store. Controlled by NadaService (Laras > Sound).
 DOLBY_VENDOR := vendor/xiaomi/onyx/proprietary
 PRODUCT_COPY_FILES += \
     $(DOLBY_VENDOR)/vendor/bin/hw/vendor.dolby.media.c2-default-service-dax:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.dolby.media.c2-default-service-dax \
@@ -154,11 +154,8 @@ PRODUCT_COPY_FILES += \
     $(DOLBY_VENDOR)/odm/etc/init/dvs-aidl-service.rc:$(TARGET_COPY_OUT_ODM)/etc/init/dvs-aidl-service.rc \
     $(DOLBY_VENDOR)/odm/vendor/persist/display/dolby_vision.cfg:$(TARGET_COPY_OUT_ODM)/vendor/persist/display/dolby_vision.cfg
 
-# Dolby DMS service daemon (DAP param backend) — binary from blobs, but a
-# switch-gated init.rc from the device tree (NOT the blob dms-service.rc, which
-# would auto-start unconditionally and duplicate the service definition).
-# The VINTF manifest (dms-service.xml) is already merged via DEVICE_MANIFEST_FILE
-# in BoardConfig.mk — do NOT also copy it here as a fragment (double-declaration).
+# The Dolby parameter daemon, with the device's own init file. Its VINTF entry is merged
+# through DEVICE_MANIFEST_FILE in BoardConfig.mk.
 PRODUCT_COPY_FILES += \
     $(DOLBY_VENDOR)/vendor/bin/hw/vendor.dolby.dms.service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.dolby.dms.service \
     $(LOCAL_PATH)/dolby/dms-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/dms-service.rc
@@ -168,28 +165,9 @@ PRODUCT_COPY_FILES += \
 
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8750/audio/primary-hal
 
-# Dolby audio_effects_config backend selection.
-#   DOLBY_RUNTIME_SWITCH=false (default): native AIDL config is copied straight to the
-#     RO search path — guaranteed-good, boots with native Dolby, no persist plumbing.
-#   DOLBY_RUNTIME_SWITCH=true: reboot-time A/B switch — both configs shipped under
-#     /vendor/etc/audio/dolby, the search path is a symlink into /mnt/vendor/persist
-#     populated by dolby-effects-switch.rc per persist.sys.lunaris.dolby.backend.
-#     Requires on-device validation of init ordering + persist labeling (sepolicy).
-DOLBY_RUNTIME_SWITCH ?= false
-
-ifeq ($(DOLBY_RUNTIME_SWITCH),true)
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/dolby/audio_effects_config_aidl.xml \
-    $(LOCAL_PATH)/configs/audio/audio_effects_config_hidl.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/dolby/audio_effects_config_hidl.xml \
-    $(LOCAL_PATH)/dolby/dolby-effects-switch.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/dolby-effects-switch.rc
-PRODUCT_PACKAGES += \
-    dolby_effects_config_symlink \
-    dolby_effects_alt_symlink
-else
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_effects_config.xml \
     $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_effects.xml
-endif
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_module_config_primary.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_module_config_primary.xml \
@@ -244,8 +222,8 @@ PRODUCT_CHARACTERISTICS := nosdcard
 # DebugFS
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
 
-# Display - OC 135Hz dynamic 60/90/135
-$(call soong_config_set,surfaceflinger,frame_rate_category_high,135)
+# Display - dynamic 60/90/120
+$(call soong_config_set,surfaceflinger,frame_rate_category_high,120)
 $(call soong_config_set,surfaceflinger,frame_rate_category_min,60)
 
 PRODUCT_PACKAGES += \
@@ -293,10 +271,9 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
     frameworks/native/data/etc/android.software.opengles.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
 
-# AFME (Adreno Frame Motion Engine) — GPU-accelerated frame generation layers
+# framefx: per-game frame generation (Luwes) and color (Kelir), armed from Pentas.
 PRODUCT_PACKAGES += \
-    libAFME_layer \
-    libVkLayer_AFME
+    libframefx
 
 
 # GNSS
@@ -615,7 +592,8 @@ PRODUCT_COPY_FILES += \
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    vendor.qti.hardware.vibrator.service
+    vendor.qti.hardware.vibrator.service \
+    hentak_npu
 
 PRODUCT_COPY_FILES += \
     vendor/qcom/opensource/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
@@ -653,6 +631,10 @@ PRODUCT_COPY_FILES += \
 # Vendor
 $(call inherit-product, vendor/xiaomi/onyx/onyx-vendor.mk)
 
+# Laras depth build models (SPEC-0013 §4): onyx has the memory for ToonOut.
+$(call inherit-product, vendor/yasvara/prebuilts/depth/depth.mk)
+$(call inherit-product, vendor/yasvara/prebuilts/afme/afme.mk)
+
 # Touch IDC (Anti-Ghost Release)
 PRODUCT_COPY_FILES += \
     device/xiaomi/onyx/idc/NVTCapacitiveTouchScreen.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/NVTCapacitiveTouchScreen.idc
@@ -671,3 +653,7 @@ PRODUCT_PACKAGES += \
 # check). The blob's shared_libs drop it; install the V4 library here instead.
 PRODUCT_PACKAGES += \
     android.media.audio.common.types-V4-cpp
+
+# Layang floating windows (SPEC-0008 §7.1): freeform window management for WM core.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml

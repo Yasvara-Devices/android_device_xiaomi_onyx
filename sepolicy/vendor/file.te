@@ -59,3 +59,6 @@ type vendor_display_data_file, data_file_type, file_type;
 
 # Dolby
 type dolby_data_file, data_file_type, file_type;
+
+# Hentak tagger session memory (memfd) the vibrator HAL shares with audioserver.
+type hal_vibrator_default_tmpfs, file_type;

@@ -2,3 +2,12 @@ allow hal_vibrator_default mnt_vendor_file:dir search;
 allow hal_vibrator_default mnt_vendor_file:file { getattr open read write };
 allow hal_vibrator_default sysfs:dir { open read };
 allow hal_vibrator_default sysfs:file { getattr open read write };
+allow hal_vibrator_default si_haptic_device:chr_file { rw_file_perms map };
+
+# Hentak's tagger (SPEC-0035) runs its network on HTP from this process: FastRPC to the CDSP, and
+# the session memory it shares with audioserver.
+allow hal_vibrator_default vendor_qdsp_device:chr_file { r_file_perms ioctl map };
+allow hal_vibrator_default dmabuf_system_heap_device:chr_file r_file_perms;
+tmpfs_domain(hal_vibrator_default)
+allow audioserver hal_vibrator_default:fd use;
+allow audioserver hal_vibrator_default_tmpfs:file { read write getattr map };

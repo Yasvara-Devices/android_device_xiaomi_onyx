@@ -10,6 +10,13 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 # A/B
 AB_OTA_UPDATER := true
+# Full-image REPLACE ops as zstd (level 22) instead of xz/bzip2: about the same size, but
+# recovery's update_engine decompresses on one thread and zstd decodes ~10x faster.
+BOARD_OTA_EXTRA_ARGS := --enable_replace_zstd=true
+
+# 8 Scudo TSDs instead of 2: less allocator lock contention in threaded apps.
+MALLOC_SCUDO_TSDS_MAX := true
+
 AB_OTA_PARTITIONS := \
     boot \
     dtbo \
@@ -109,10 +116,6 @@ DEVICE_MANIFEST_FILE += \
     $(DEVICE_PATH)/misys/vendor.xiaomi.hardware.misys.common.xml \
     $(DEVICE_PATH)/misys/manifest_blackbox.xml
 
-# Dolby — ported HIDL stack board config (sepolicy dir, odm.prop, HIDL VINTF).
-# The dolby control app + native AIDL/DAX3 stack are wired via device.mk/dolby.mk.
-include vendor/lunaris/dolby/BoardConfigDolby.mk
-
 # HWUI
 HWUI_COMPILE_FOR_PERF := true
 
@@ -169,6 +172,10 @@ BOARD_KERNEL_CMDLINE := \
     kernel.panic_on_rcu_stall=0 \
     page_alloc.shuffle=0 \
     randomize_kstack_offset=0 \
+    mitigations=off \
+    arm64.nopauth \
+    arm64.nobti \
+    nowatchdog \
     loglevel=0 \
     swinfo.fingerprint=$(LINEAGE_VERSION) \
     mtdoops.fingerprint=$(LINEAGE_VERSION) \
@@ -305,7 +312,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 include device/lineage/sepolicy/common/sepolicy.mk
 include device/lineage/sepolicy/libperfmgr/sepolicy.mk
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-include packages/apps/GameSpace/sepolicy/sepolicy.mk
+include packages/apps/Pentas/sepolicy/sepolicy.mk
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/public

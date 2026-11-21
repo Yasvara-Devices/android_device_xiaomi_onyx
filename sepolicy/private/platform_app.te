@@ -1,2 +1,2 @@
-# Silence SystemUI (platform_app) probing ro.usb.uvc.enabled without violating CTS neverallow
-dontaudit platform_app usb_uvc_enabled_prop:file r_file_perms;
+# Silence SystemUI (platform_app/platform_app_36) probing ro.usb.uvc.enabled without violating CTS neverallow
+dontaudit platform_app_all usb_uvc_enabled_prop:file r_file_perms;

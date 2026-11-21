@@ -370,6 +370,17 @@
             ],
             "DefaultIndex": 0,
             "ResetOnInit": true
+        },
+        {
+            "Name": "PowerHALInteraction",
+            "Path": "vendor.powerhal.interaction",
+            "Values": [
+                "1",
+                "0"
+            ],
+            "DefaultIndex": 1,
+            "ResetOnInit": true,
+            "Type": "Property"
         }
     ],
     "Actions": [
@@ -431,6 +442,48 @@
             "PowerHint": "INTERACTION",
             "Node": "sysDevicesSystemCpuBusDcvsLlcc240b7400QcomBwmonLlccMaxFreq",
             "Value": "933000",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy2WaltAdaptiveHighFreq",
+            "Value": "1632000",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy2WaltAdaptiveLowFreq",
+            "Value": "1286400",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy2WaltAdaptiveLevel1",
+            "Value": "1056000",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy5WaltAdaptiveHighFreq",
+            "Value": "1728000",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy5WaltAdaptiveLowFreq",
+            "Value": "1516800",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "sysDevicesSystemCpuCpufreqPolicy5WaltAdaptiveLevel1",
+            "Value": "1190400",
+            "Duration": 0
+        },
+        {
+            "PowerHint": "INTERACTION",
+            "Node": "PowerHALInteraction",
+            "Value": "1",
             "Duration": 0
         },
         {
@@ -497,6 +550,12 @@
             "PowerHint": "LAUNCH",
             "Node": "sysDevicesSystemCpuCpufreqPolicy5WaltAdaptiveLevel1",
             "Value": "1190400",
+            "Duration": 2000
+        },
+        {
+            "PowerHint": "LAUNCH",
+            "Node": "PowerHALInteraction",
+            "Value": "1",
             "Duration": 2000
         },
         {

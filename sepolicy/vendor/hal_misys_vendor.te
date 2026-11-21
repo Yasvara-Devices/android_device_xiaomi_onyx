@@ -8,7 +8,7 @@ init_daemon_domain(hal_misys_vendor)
 
 # Serves vendor.xiaomi.hardware.misys.common.{IMiSysImpl,IHypSysIntl}/default
 allow hal_misys_vendor hal_misys_vendor_service:service_manager { add find };
-binder_call(hal_misys_vendor, platform_app)
+binder_call(hal_misys_vendor, platform_app_all)
 
 # It is also a *client* of the local xiaomi.system.hypsys.common dummy
 # (hal_hypsys_vendor). main() CHECK-fails and SIGABRTs if it cannot reach
@@ -23,7 +23,7 @@ allow hal_misys_vendor vendor_camera_data_file:file create_file_perms;
 # MiuiCamera never hands over a path - it copies into shared memory and passes the
 # fd ("my_shm"/getFdDup/"Failed to get pfd" in com.xiaomi.cam.watermark). That is by
 # design: domain.te neverallows any non-appdomain touching app_data_file.
-allow hal_misys_vendor platform_app:fd use;
+allow hal_misys_vendor platform_app_all:fd use;
 allow hal_misys_vendor appdomain_tmpfs:file { getattr map read write };
 
 # "file /dev/kmsg r" in the init rc

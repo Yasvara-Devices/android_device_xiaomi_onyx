@@ -6,7 +6,7 @@
 import /vendor/etc/init/hw/init.batterysecret.rc
 # mi_thermald is retired: the kernel-node control it used to do now lives in
 # mi_thermal_engine (vendor daemon, see sepolicy/vendor/mi_thermal_engine.te),
-# driven by GameSpace over persist.sys.mithermal.*. The blob itself is no longer
+# driven by Pentas over persist.sys.mithermal.*. The blob itself is no longer
 # shipped, so init.mi_thermald.rc does not exist any more — this line stays
 # commented out as the guard in case a blob re-extract re-adds it. Do not restore.
 # import /vendor/etc/init/hw/init.mi_thermald.rc
@@ -71,6 +71,8 @@ on boot
     # AOSP write, in the same trigger, so it already resolves here.
     # Verified at runtime: /sys/fs/f2fs/sda34 is /data on this device.
     write /dev/sys/fs/by-name/userdata/iostat_enable 0
+    # Cap F2FS compress_cache at 10% of free RAM (SPEC-0048 Padat).
+    write /dev/sys/fs/by-name/userdata/compress_percent 10
 
     # Create persist for camera calibration data
     mkdir /mnt/vendor/persist/camera 0755 system cameraserver
@@ -328,11 +330,38 @@ on property:sys.boot_completed=1
     # Enable PowerHAL hint processing
     setprop vendor.powerhal.init 1
 
-    # 5G NR TCP & Mobile Data Buffer Optimization
-    write /proc/sys/net/ipv4/tcp_rmem "2097152 4194304 16777216"
-    write /proc/sys/net/ipv4/tcp_wmem "2097152 4194304 16777216"
+    # 5G NR / LTE CA TCP & Mobile Data Buffer Optimization (SPEC-0044 M5 + SPEC-0045)
+    write /proc/sys/net/ipv4/tcp_rmem "4096 2097152 16777216"
+    write /proc/sys/net/ipv4/tcp_wmem "4096 1048576 16777216"
     write /proc/sys/net/core/rmem_max 16777216
     write /proc/sys/net/core/wmem_max 16777216
+    write /proc/sys/net/ipv4/tcp_slow_start_after_idle 0
+    write /proc/sys/net/ipv4/tcp_notsent_lowat 131072
+    write /proc/sys/net/ipv4/tcp_no_metrics_save 1
+    write /proc/sys/net/ipv4/tcp_ecn 1
+    write /proc/sys/net/ipv4/tcp_fastopen 3
+    write /proc/sys/net/ipv4/tcp_comp_sack_delay_ns 0
+    # Enable Receive Flow Steering (RFS) across all 8 cores
+    write /proc/sys/net/core/rps_sock_flow_entries 32768
+    write /sys/class/net/rmnet_data0/queues/rx-0/rps_flow_cnt 4096
+    write /sys/class/net/rmnet_data1/queues/rx-0/rps_flow_cnt 4096
+    write /sys/class/net/rmnet_data2/queues/rx-0/rps_flow_cnt 4096
+    write /sys/class/net/rmnet_data3/queues/rx-0/rps_flow_cnt 4096
+    # WCN7750 exposes 5 RX queues (rx-0..4); enable RFS across all queues
+    write /sys/class/net/wlan0/queues/rx-0/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-1/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-2/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-3/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-4/rps_flow_cnt 4096
+
+# wlan0 is created after sys.boot_completed=1 (when qca_cld3_wcn7750 loads FW),
+# so apply RFS on all 5 RX queues whenever Wi-Fi brings wlan0 online.
+on property:wifi.active.interface=wlan0
+    write /sys/class/net/wlan0/queues/rx-0/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-1/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-2/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-3/rps_flow_cnt 4096
+    write /sys/class/net/wlan0/queues/rx-4/rps_flow_cnt 4096
 
 service cnss-daemon /system/vendor/bin/cnss-daemon -n -l --max_file_count 3 --max_file_size 20
 

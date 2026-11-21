@@ -36,3 +36,6 @@ allow mi_thermal_engine proc_stat:file r_file_perms;
 
 # System properties for IPC with MiThermalService (system_public cross-domain)
 get_prop(mi_thermal_engine, mithermal_prop)
+
+# Interaction hint from the power HAL (vendor.powerhal.interaction)
+get_prop(mi_thermal_engine, vendor_power_prop)

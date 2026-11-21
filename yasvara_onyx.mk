@@ -24,10 +24,6 @@ $(call inherit-product, device/xiaomi/onyx/device.mk)
 # MiuiCamera (replaces Aperture, see PRODUCT_NO_CAMERA above)
 $(call inherit-product, device/xiaomi/onyx-miuicamera/device.mk)
 
-# Dolby — control app + ported HIDL stack (dormant). The native AIDL/DAX3
-# audio effect + Dolby Vision are wired in device.mk.
-$(call inherit-product, vendor/lunaris/dolby/dolby.mk)
-
 PRODUCT_NAME := yasvara_onyx
 PRODUCT_DEVICE := onyx
 PRODUCT_MANUFACTURER := Xiaomi
@@ -70,14 +66,30 @@ PRODUCT_PACKAGES += \
     Messages \
     Photos
 
-# GameSpace: game dashboard, per-game GPU/thermal/touch tuning. Event-driven
+# Pentas: game dashboard, per-game GPU/thermal/touch tuning. Event-driven
 # (TaskStackListener), so it costs nothing while no game is in front.
 PRODUCT_PACKAGES += \
-    GameSpace
+    Pentas \
+    Laras
+
+# Alih: translates a game's text in place. Bound only while such a game runs.
+PRODUCT_PACKAGES += \
+    Alih
+
+# Rekam: screen recorder. Its engine process exists only while recording.
+PRODUCT_PACKAGES += \
+    Rekam
 
 # SurfaceFlinger performance boost
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.surface_flinger.uclamp.min=135
+
+# About phone (design/about-phone): this device's maintainer, and the camera sensors' real
+# megapixels per camera id (the HAL reports only the binned arrays, 13 and 5 MP).
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.yasvara.maintainer=IRedDragonICY \
+    ro.yasvara.maintainer.url=https://github.com/IRedDragonICY \
+    ro.yasvara.camera.mp=0:50,1:20
 
 # Optimized DEXopt
 PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := speed-profile
@@ -111,11 +123,15 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
     DocumentsUI \
     ThemePicker \
     FaceUnlock \
-    GameSpace
+    Pentas \
+    Laras
 
 # Strip unnecessary density resources — POCO F7 is xxhdpi (504 DPI)
 # Removes mdpi/hdpi/xhdpi drawables from ALL apps → saves 50-100MB system-wide
-PRODUCT_AAPT_CONFIG := normal
+# Ship English and Indonesian only: system locales, and every built app's
+# resources (aapt2 -c drops other translations; values-in is Indonesian).
+PRODUCT_LOCALES := en_US id_ID
+PRODUCT_AAPT_CONFIG := normal in
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Override dalvik heap for 12GB RAM device (default is 6GB profile)

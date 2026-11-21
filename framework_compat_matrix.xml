@@ -15,6 +15,26 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <!-- Hentak's game haptics stream: a second vibrator HAL instance that only
+         audioserver uses. The platform matrices list IVibrator/default alone. -->
+    <hal format="aidl" optional="true">
+        <name>android.hardware.vibrator</name>
+        <version>1-4</version>
+        <interface>
+            <name>IVibrator</name>
+            <instance>hentak</instance>
+        </interface>
+    </hal>
+    <!-- Hentak's learned game-sound tagger (SPEC-0035), served by the vibrator HAL
+         for audioserver. -->
+    <hal format="aidl" optional="true">
+        <name>vendor.yasvara.hentak</name>
+        <version>1</version>
+        <interface>
+            <name>ITagger</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <!-- Blackbox, registered by the same hypsys_vendor daemon right after
          IMiSysImpl. If it is not declared, servicemanager rejects the add with
          EX_ILLEGAL_ARGUMENT and the daemon CHECK-fails and crash-loops. -->

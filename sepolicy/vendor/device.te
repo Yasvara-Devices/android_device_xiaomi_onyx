@@ -13,3 +13,6 @@ type vendor_fingerprint_device, dev_type;
 
 # Touchfeature
 type touchfeature_device, dev_type;
+
+# Haptics: sih688x mmap stream
+type si_haptic_device, dev_type;

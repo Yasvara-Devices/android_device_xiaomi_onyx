@@ -40,3 +40,7 @@ vendor.xiaomi.hardware.blackbox.IBlackboxImpl/default      u:object_r:hal_misys_
 
 # Touchfeature
 vendor.xiaomi.hw.touchfeature.ITouchFeature/default          u:object_r:hal_touchfeature_xiaomi_service:s0
+
+# Game haptics envelope from audioserver, played by the vibrator HAL
+android.hardware.vibrator.IVibrator/hentak                   u:object_r:hal_vibrator_service:s0
+vendor.yasvara.hentak.ITagger/default                         u:object_r:hal_vibrator_service:s0

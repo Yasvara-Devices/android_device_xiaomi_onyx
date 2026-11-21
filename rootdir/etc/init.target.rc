@@ -234,29 +234,9 @@ on property:persist.sys.hwui_renderer=*
 on property:persist.sys.renderengine_backend=*
     setprop debug.renderengine.backend ${persist.sys.renderengine_backend}
 
-# GameSpace dynamic WALT boost list.
+# Pentas dynamic WALT boost list.
 # Node ini REPLACE-on-write, jadi selalu rekonstruksi full string:
 # engine libs statis + package game aktif (atau "none" saat tidak ada sesi).
-on property:persist.sys.gamespace.sched_lib_extra=*
-    write /proc/sys/walt/sched_lib_name "UnityMain,libunity.so,libil2cpp.so,libUE4.so,libUE5.so,libgodot.so,libcocos2d.so,${persist.sys.gamespace.sched_lib_extra}"
+on property:persist.sys.pentas.sched_lib_extra=*
+    write /proc/sys/walt/sched_lib_name "UnityMain,libunity.so,libil2cpp.so,libUE4.so,libUE5.so,libgodot.so,libcocos2d.so,${persist.sys.pentas.sched_lib_extra}"
     setprop vendor.display.game.packagename ${persist.sys.game.enhance.packagename}
-
-on property:persist.sys.afme.smooth_motion=1
-    setprop vendor.display.use_smooth_motion 1
-    setprop vendor.perf.framepacing.enable 1
-
-on property:persist.sys.afme.smooth_motion=0
-    setprop vendor.display.use_smooth_motion 0
-    setprop vendor.perf.framepacing.enable 0
-
-# AFME session: raise the GPU devfreq floor while frame generation is
-# active. The msm-adreno-tz governor never ramps for frame-paced games
-# (measured: 300-515MHz at ~66% busy in ZZZ city → base fps too unstable
-# for the layer's pacing target), and a floor set via adb resets on
-# reboot. 763MHz = middle bin of the Adreno 840 frequency table.
-on property:persist.sys.afme.session=1
-    write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 763000000
-
-on property:persist.sys.afme.session=0
-    write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 150000000
-
