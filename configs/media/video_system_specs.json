@@ -77,9 +77,17 @@
 
         // list of codec plugin libraries to be loaded into codec registry
         "QC2CodecPlugins": [
+            "libqcodec2_srfilter.so",
             "libqcodec2_imgtxrfilter.so",
             "libqcodec2_dolbydecoderfilter.so"
         ],
+
+        // Xiaomi's SR: off unless a client sets vendor.ext-mi-sr-enable at configure.
+        "QC2PostProcessingFilters": {
+            "vppFilter": [
+                "c2.mi.filter.sr"
+            ]
+        },
 
         "QC2PreProcessingFilters": [
             "libqcodec2_imgtxrfilter.so",

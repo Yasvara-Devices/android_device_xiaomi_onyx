@@ -168,12 +168,12 @@ vendor/lib64/libmisight.so|395fc589e7994a5a35a771676ffc1193d3ed344b
 # Audio soundfx
 vendor/lib64/soundfx/libquasar.so|d1fa2d70ce4c3107757bb7e88af9ffffda2e2929|dae77443eab30f92d8be0a18993ee251e143a30e
 # Xiaomi noise suppression — no source equivalent
-vendor/lib64/soundfx/libmiwndnsprocessingaidl.so;DISABLE_DEPS|062e10264c37042813ef2c54383f77674d99afe9
+vendor/lib64/soundfx/libmiwndnsprocessingaidl.so;DISABLE_DEPS|062e10264c37042813ef2c54383f77674d99afe9|4a7ddb3319b870fa4161d513d8a42d8fdffcbd8d
 # Dolby DAX3 effect libraries, referenced by configs/audio/audio_effects_config.xml
 # as dap_hw / dvl / dlb_spatializer / dlb_gamedap. Everything else this device used to
 # carry as a soundfx blob is now built from source (see PRODUCT_PACKAGES in device.mk).
 vendor/lib64/soundfx/libdlbvolaidl.so;DISABLE_DEPS|a07af56dccb04f3dd0d089d3cb32755107534c43
-vendor/lib64/soundfx/libhwdapaidl.so;DISABLE_DEPS|4ac11d9b734dc2479436b24b6438459f67d1330a
+vendor/lib64/soundfx/libhwdapaidl.so;DISABLE_DEPS|4ac11d9b734dc2479436b24b6438459f67d1330a|03aa9f6923f9f424867646f13cb727e14ad78a12
 vendor/lib64/soundfx/libswgamedapaidl.so;DISABLE_DEPS|b94faf237b5ce72ab54f74694d7a26c471586e2b
 vendor/lib64/soundfx/libswspatializeraidl.so;DISABLE_DEPS|571a42404bfebd652aff33f38e96f62f8859ac07
 
@@ -1729,7 +1729,7 @@ vendor/lib64/libjpegencoder.so:vendor/lib64/libjpegencoder_prebuilt.so;FIX_SONAM
 vendor/lib64/libmctfengine_stub.so|3bc3816c39446f52af88ca4685773c5095687c0c
 vendor/lib64/libmfGhostDetection.so|ad81bf29bad38aa051c038aa8e6cb376eaa6bf0e
 vendor/lib64/libmfec.so|ea583934a545ec44dbab74631b6fd93613b71ac3
-vendor/lib64/libmialgo.so|b8e9e6290e954f852eeb2cece49db1894b51371a
+vendor/lib64/libmialgo.so|b8e9e6290e954f852eeb2cece49db1894b51371a|bc9edcdb26bbb69619bd3553106f73eaa044902b
 vendor/lib64/libmialgo_ai_vision.so|e1314dc16c87b1480b301e473efa66deae63ba91
 vendor/lib64/libmialgo_aihighlight.so|58a872bd9f81974a1f0c9dce20bbbb9c6baa59e6
 vendor/lib64/libmialgoengine.so|68d91344e2338a3c6bc63d188946e4ead2e8cd4e
@@ -1741,7 +1741,7 @@ vendor/lib64/libmicamera_aidl_provider.so;DISABLE_DEPS|a7ea447407e589d45234b5b93
 vendor/lib64/libmicamera_aidl_utils.so;DISABLE_DEPS|081ec9ce5f6b166de7692d3389b597035807a867
 vendor/lib64/libmicamera_fps_checker.so|0c2df3039631deb6caef780c9b9021581ec9822a
 vendor/lib64/libmicamera_hal_core.so|061b97149914a9734db62d848ebf09f18c5b6570|872b9d63f70b19dbc8c65ec00f90375f46a3889c
-vendor/lib64/libmicamera_hal_policy.so|096098a0ad5818e2d2a4d57649a16c9d46638499
+vendor/lib64/libmicamera_hal_policy.so|096098a0ad5818e2d2a4d57649a16c9d46638499|5461f40f76adc54c96700054917666769ac88f14
 vendor/lib64/libminikin.xiaomi.so|f5418d22eebf9a95d19a8e560632e6390b236eff
 vendor/lib64/libmis_platform.so|9cfec479dcf406504ef13df548a20efc29c07d9a
 vendor/lib64/libmis_plugin_dummy.so|716a6667571537ead73764bacc54529e9fcd8777
@@ -2352,8 +2352,8 @@ odm/etc/display/qdcm_calib_data_xiaomi_o10u_36_02_0b_video_mode_dsc_dsi_panel.js
 odm/etc/display/qdcm_calib_data_xiaomi_o10u_42_02_0a_video_mode_dsc_dsi_panel.json|e823c33213d4fae2a3d8180643d3fb9fed32e74c
 odm/etc/mdss_dsi_o10u_36_02_0b_dsc_vid_mi.xml|588cb7ebeaec7cf2081966b17ee3b704f29fc0dc
 odm/etc/mdss_dsi_o10u_42_02_0a_dsc_vid_mi.xml|9285b30792e0209ce7a4272105740d62e9319824
-product/etc/displayconfig/display_id_4630947173316895379.xml:vendor/etc/displayconfig/display_id_4630947173316895379.xml|7986e7afdb85b5c013a84e41f7b167890d285400
-product/etc/displayconfig/display_id_4630947258895476883.xml:vendor/etc/displayconfig/display_id_4630947258895476883.xml|7986e7afdb85b5c013a84e41f7b167890d285400
+product/etc/displayconfig/display_id_4630947173316895379.xml:vendor/etc/displayconfig/display_id_4630947173316895379.xml|7986e7afdb85b5c013a84e41f7b167890d285400|baceb2dc7f3d2ade90acbf05ffae29d588e5cac2
+product/etc/displayconfig/display_id_4630947258895476883.xml:vendor/etc/displayconfig/display_id_4630947258895476883.xml|7986e7afdb85b5c013a84e41f7b167890d285400|baceb2dc7f3d2ade90acbf05ffae29d588e5cac2
 
 # Displayfeature
 odm/lib64/hw/displayfeature.default.so|b9d1eb1d7cca3cc5e367cbfd5de275ae79dfeac7|3ea2ee8ce7243466d3114b4d852b37120372f600
@@ -2532,7 +2532,7 @@ vendor/lib64/vendor.dolby.dms-V1-ndk.so|a5b4632ad8f7bf013d25fe9e6394548da597f082
 vendor/lib64/vendor.dolby.hardware.dms@2.0.so|53c17b5e83c17df41413769b5145d2fe0f3e7903
 
 # Fingerprint
-odm/lib64/anc.hal.so|bfd467807ce1cbf5649f044fa28b3831ea9f7c84
+odm/lib64/anc.hal.so|bfd467807ce1cbf5649f044fa28b3831ea9f7c84|e28840e34c504765ec2c87dee72652c846707703
 odm/lib64/hw/fingerprint.goodix_fod.so:odm/lib64/hw/fingerprint.goodix_fod.default.so;FIX_SONAME|5910f97ea9efcb659b7640931f3c07fca341f483|6ab11e5ece07f52d89f4bb3a57c122f0d395c3d5
 odm/lib64/hw/fingerprint.jiiov.so:odm/lib64/hw/fingerprint.jiiov.default.so;FIX_SONAME|0ec734c6d5a91cffd509abf8916d78b785f64ebf|a3aedfb96c6854d415609f6c08d0b6de031cd436
 odm/lib64/libgf_hal.so|7f8ecd1750d48822c0aabb0a7a0a5e4e78d5e7a9
@@ -2773,6 +2773,15 @@ vendor/etc/media_codecs_tuna_v0.xml|30051994e716861318bd91a7436f03160e613e48
 vendor/etc/media_tuna_v0/video_system_specs.json|ca38f724ad5c84d35b9c18d07f25d30e31bc35c1
 
 # MiSys (HypSys) - MiuiCamera proxies its watermark staging writes through this
+# Video SR - pinned from OS3.0.305.0.WOLCNXM, Global does not ship them. libmialgo looks models up by ro.soc.model.
+vendor/etc/display/sm8735p_sr_2x_y1280x720.dlc:vendor/etc/display/sm8735_sr_2x_y1280x720.dlc|84c5904fd51e64d9e03ca4de7e8bbbbf8a7632f7
+vendor/etc/display/sm8735p_sr_2x_y720x1280.dlc:vendor/etc/display/sm8735_sr_2x_y720x1280.dlc|8ab2846ce1fa2510d707b6b828ddac79a5413e44
+vendor/etc/display/sm8735p_sr_3x_y544x960.dlc:vendor/etc/display/sm8735_sr_3x_y544x960.dlc|cdcde065d2ae8941b68381d90f040f3ab112fc25
+vendor/etc/display/sm8735p_sr_3x_y960x544.dlc:vendor/etc/display/sm8735_sr_3x_y960x544.dlc|e1f36afe519e4836facd1a09ba419464e533c046
+vendor/etc/display/sm8735p_sr_5x_y384x640.dlc:vendor/etc/display/sm8735_sr_5x_y384x640.dlc|e8171d2ff14e781020d141f75b793310e9651045
+vendor/etc/display/sm8735p_sr_5x_y640x384.dlc:vendor/etc/display/sm8735_sr_5x_y640x384.dlc|a7a81a79a2245a1df5a337d32b3e23aa70591033
+vendor/lib64/libqcodec2_srfilter.so|c0d5f761c967cc7aa59f95e79490d2aab32dd353
+
 # Pinned: taken from OS3.0.301.0.WOLIDXM, this build does not ship them
 vendor/bin/hypsys_vendor|90ab9bd12af17e80b871f6e6ec5422fff0b134dc
 vendor/lib64/vendor.xiaomi.hardware.blackbox-V1-ndk.so|c29bd353cb9e786831530c3de0b3bf0f83d1a5da
@@ -3394,7 +3403,7 @@ vendor/lib64/vendor.qti.hardware.soter-V1-ndk.so|51d27b3d771bdd0111a2f9755136065
 # Thermal engine
 # NOTE: the thermal-engine-v2 and mi_thermald daemons are deliberately NOT extracted.
 # Thermal policy is owned by mi_thermal_engine (device/xiaomi/onyx/mithermal), driven by
-# GameSpace over persist.sys.mithermal.*. Both stock daemons were already dead on device
+# Pentas over persist.sys.mithermal.*. Both stock daemons were already dead on device
 # (thermal-engine-v2's rc is commented out by QTI; init.mi_thermald.rc is never imported),
 # so they only wasted ~4 MB of vendor. Do not re-add them on a blob re-extract.
 # libthermalclient.so / liblmthermallistner.so DO stay: other vendor blobs link against them.
@@ -3543,8 +3552,8 @@ odm/firmware/o10u/novatek_nt38771_o10u_fw_csot.bin|aab04c3af857135d55a51393eeaa4
 odm/firmware/o10u/novatek_nt38771_o10u_fw_tm.bin|cdcfda45c3adee6fb6aafb347ec6b077b6534c20
 odm/firmware/o10u/novatek_nt38771_o10u_mp_csot.bin|5048b76c7a8194edc194b7a09bf8b8bd347c975c
 odm/firmware/o10u/novatek_nt38771_o10u_mp_tm.bin|342c334d52518bfc404db5d9af65a1e3eaf012ba
-odm/firmware/o10u_nova_csot_thp_config.ini|9b7d8468e4142e4bb1c24ef7533675923d6b61fb|49cac8ec5b5444996ade321154664929f7d3e75e
-odm/firmware/o10u_nova_tm_thp_config.ini|14b62732e9231f0d27b79b870b65b8320c47f6d4|92d45a44f4c697258d8a563f12a945646e58f07e
+odm/firmware/o10u_nova_csot_thp_config.ini|9b7d8468e4142e4bb1c24ef7533675923d6b61fb|ef3fef6e5ca2c59316e83d505d3e77734edc177a
+odm/firmware/o10u_nova_tm_thp_config.ini|14b62732e9231f0d27b79b870b65b8320c47f6d4|4ada2adeba01f57730d8fbd438c5c7cdd690d635
 
 # Touchscreen (recovery)
 odm/bin/touch_report_debug:recovery/root/vendor/bin/touch_report_debug;MAKE_COPY_RULE_ONLY|8c8789e9a94f1174e638ddcb7ca6c461b37e9141
@@ -3621,10 +3630,10 @@ system_ext/lib64/libwfdconfigutils.so|4e8e70b201bbcfb6354e89b07056d84f5b9f2459
 system_ext/lib64/libwfddisplayconfig.so|53d07be91f77238203a54551fef6c262d35e42dd
 system_ext/lib64/libwfdmminterface.so|54dd1303dbd891819028dd955f743b29c7439f46
 system_ext/lib64/libwfdmmsink.so|025bfc9520f05f461bf1efd19e49a2f5d7f660f0
-system_ext/lib64/libwfdmmsrc_system.so|2d9091a9eb7e88a69f081205c1117b2e3286f4d9|4109a7e8d608a45b723ac760f1ffc1d59faaeb49
+system_ext/lib64/libwfdmmsrc_system.so|2d9091a9eb7e88a69f081205c1117b2e3286f4d9|7adba597b0534f9ee931c0db40669e605b07a1b4
 system_ext/lib64/libwfdnative.so;SYMLINK=system_ext/priv-app/WfdService/lib/arm64/libwfdnative.so|31d003a63ef42573ff0675eb42f7eec25f2a2ee9|fa8cce12be16ab2627c32e35aeda90afbcb9f295
 system_ext/lib64/libwfdrtsp.so|debde37cd38d3a4bfc29b87f49602c59d8e8b220
-system_ext/lib64/libwfdservice.so|ba23da3a50e6314f512b8a66f3d1233689928548
+system_ext/lib64/libwfdservice.so;DISABLE_CHECKELF|ba23da3a50e6314f512b8a66f3d1233689928548
 system_ext/lib64/libwfdsinksm.so|d749dbe9e57fd6635528f22df1660e6938cb68f7
 system_ext/lib64/libwfduibcinterface.so|ed337eff2a5b32d90ce468e2486e5db86518abbc
 system_ext/lib64/libwfduibcsink.so|436e98e2b243761055f39561078960d94b4cfa39

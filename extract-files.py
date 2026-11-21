@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from pathlib import Path
+
 from extract_utils.fixups_blob import (
     BlobFixupCtx,
     File,
@@ -96,6 +98,10 @@ def blob_fixup_graphic_buffer_size(
                 f.write(b'\x00\xa6\x81\x52')  # AArch64 mov w0, #0xd30
 
 
+DISPLAY_CONFIG_TAIL = Path(__file__).with_name('configs').joinpath(
+    'display', 'displayconfig_tail.xml'
+).read_text()
+
 blob_fixups: blob_fixups_user_type = {
     (
         'odm/bin/hw/vendor.xiaomi.hw.touchfeature-service',
@@ -140,7 +146,7 @@ blob_fixups: blob_fixups_user_type = {
     ): blob_fixup()
         .regex_replace('xml=version', 'xml version'),
 
-    # GameSpace's accidental-touch filter is an OSS kernel ABI, not a HAL mode:
+    # Pentas's accidental-touch filter is an OSS kernel ABI, not a HAL mode:
     # the closed touchfeature HAL accepts modes 7/15 but never forwards either to
     # the THP driver on onyx. Without these the nodes stay root:root and the app
     # reports the filter as unavailable. Applied here rather than by hand because
@@ -179,8 +185,44 @@ blob_fixups: blob_fixups_user_type = {
         .regex_replace(
             r'(?m)^(\s*)zone_corner_report_time_limit_after_move=200000$',
             r'\g<1>zone_corner_report_time_limit_after_move=1000000',
+        )
+        # Pentas's Fast touch response, the base the HAL's mode 206 widens from for
+        # Stable. Kalman prediction is what overshoots a flick (8.6 px -> ~1 px); no
+        # HAL mode reaches it. Numbers in lab/touch-stutter/README.md.
+        .regex_replace(r'(?m)^(\s*)kalman_predict_en=1$', r'\g<1>kalman_predict_en=0')
+        .regex_replace(r'(?m)^(\s*)move_jitter_lock_dis=6$', r'\g<1>move_jitter_lock_dis=3')
+        .regex_replace(
+            r'(?m)^(\s*)stable_jitter_lock_dis_game_mode=10$',
+            r'\g<1>stable_jitter_lock_dis_game_mode=5',
+        )
+        .regex_replace(
+            r'(?m)^(\s*)first_jitter_lock_dis_game_mode=30$',
+            r'\g<1>first_jitter_lock_dis_game_mode=15',
+        )
+        .regex_replace(
+            r'(?m)^(\s*)first_jitter_stable_frame_game_mode=36$',
+            r'\g<1>first_jitter_stable_frame_game_mode=18',
     ),
 
+    # The SR table in MISR::MISR, at the scales the SM8735 models were built for: stock keeps these
+    # for one product name, and the default table asks for models only the SM8750 has.
+    'vendor/lib64/libmialgo.so': blob_fixup()
+        .binary_regex_replace(
+            bytes.fromhex('80020000800100000300000001000000'),
+            bytes.fromhex('80020000800100000500000001000000'),
+        )
+        .binary_regex_replace(
+            bytes.fromhex('c0030000200200000200000001000000'),
+            bytes.fromhex('c0030000200200000300000001000000'),
+        )
+        .binary_regex_replace(
+            bytes.fromhex('80010000800200000300000000000000'),
+            bytes.fromhex('80010000800200000500000000000000'),
+        )
+        .binary_regex_replace(
+            bytes.fromhex('20020000c00300000200000000000000'),
+            bytes.fromhex('20020000c00300000300000000000000'),
+        ),
     'odm/lib64/camera/components/com.mi.node.tsskinbeautifier.so': blob_fixup()
         .call(
             blob_fixup_graphic_buffer_size,
@@ -310,12 +352,19 @@ blob_fixups: blob_fixups_user_type = {
     'system_ext/etc/vintf/manifest/vendor.qti.qesdsys.service.xml': blob_fixup()
         .regex_replace(r'(?s)^.*?(?=<manifest)', ''),
 
+    # Calls ion_close without NEEDing libion; A16's libdmabufheap used to
+    # provide it. A17 libion is a stub (ION is gone on GKI), which is enough.
+    'odm/lib64/anc.hal.so': blob_fixup()
+        .add_needed('libion.so'),
+
     # libheif was removed in A17 and no libheif symbol is referenced.
     'system_ext/lib64/libwfdcommonutils.so': blob_fixup()
         .remove_needed('libheif.so'),
 
+    # A17 moved AudioSystem out of libaudioclient into libaudiobase.
     'system_ext/lib64/libwfdmmsrc_system.so': blob_fixup()
-        .add_needed('libgui_shim.so'),
+        .add_needed('libgui_shim.so')
+        .add_needed('libaudiobase.so'),
 
     'system_ext/lib64/libwfdnative.so': blob_fixup()
         .add_needed('libbinder_shim.so')
@@ -335,45 +384,22 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/etc/displayconfig/display_id_4630947173316895379.xml',
         'vendor/etc/displayconfig/display_id_4630947258895476883.xml',
     ): blob_fixup()
+        # Keep stock's map and HDR ratios: the HAL remaps brightness assuming them. The tail holds
+        # ramps and stock's lux hysteresis, see lab/display-hal/tools/gen_displayconfig_tail.py.
         .regex_replace(
-            r'<minimumLux>4475</minimumLux>',
-            r'<minimumLux>2000</minimumLux>',
+            r'<screenBrightnessMap>',
+            '<screenBrightnessMap interpolation="linear">',
+        )
+        # The ring buffer clamps old samples to this horizon, so it must exceed the debounce.
+        .regex_replace(
+            r'<ambientLightHorizonLong>\d+</ambientLightHorizonLong>',
+            '<ambientLightHorizonLong>2500</ambientLightHorizonLong>',
         )
         .regex_replace(
-            r'<ambientLightHorizonLong>1500</ambientLightHorizonLong>',
-            r'<ambientLightHorizonLong>2000</ambientLightHorizonLong>',
+            r'<ambientLightHorizonShort>\d+</ambientLightHorizonShort>',
+            '<ambientLightHorizonShort>500</ambientLightHorizonShort>',
         )
-        .regex_replace(
-            r'<ambientLightHorizonShort>1000</ambientLightHorizonShort>',
-            r'<ambientLightHorizonShort>500</ambientLightHorizonShort>',
-        )
-        .regex_replace(
-            # Replace stock ramp rates in place (blobs already carry these
-            # tags; inserting would duplicate them). Slower tuning from
-            # 980c48a/7f94589: gentle fast ramps, lazy slow ramps.
-            r'<screenBrightnessRampFastDecrease>[^<]*</screenBrightnessRampFastDecrease>',
-            r'<screenBrightnessRampFastDecrease>0.30</screenBrightnessRampFastDecrease>',
-        )
-        .regex_replace(
-            r'<screenBrightnessRampFastIncrease>[^<]*</screenBrightnessRampFastIncrease>',
-            r'<screenBrightnessRampFastIncrease>0.30</screenBrightnessRampFastIncrease>',
-        )
-        .regex_replace(
-            r'<screenBrightnessRampSlowDecrease>[^<]*</screenBrightnessRampSlowDecrease>',
-            r'<screenBrightnessRampSlowDecrease>0.12</screenBrightnessRampSlowDecrease>',
-        )
-        .regex_replace(
-            r'<screenBrightnessRampSlowIncrease>[^<]*</screenBrightnessRampSlowIncrease>',
-            r'<screenBrightnessRampSlowIncrease>0.24</screenBrightnessRampSlowIncrease>',
-        )
-        .regex_replace(
-            r'<screenBrightnessRampIncreaseMaxMillis>[^<]*</screenBrightnessRampIncreaseMaxMillis>',
-            r'<screenBrightnessRampIncreaseMaxMillis>2000</screenBrightnessRampIncreaseMaxMillis>',
-        )
-        .regex_replace(
-            r'<screenBrightnessRampDecreaseMaxMillis>[^<]*</screenBrightnessRampDecreaseMaxMillis>',
-            r'<screenBrightnessRampDecreaseMaxMillis>5000</screenBrightnessRampDecreaseMaxMillis>',
-        ),
+        .regex_replace(r'</displayConfiguration>', DISPLAY_CONFIG_TAIL + '</displayConfiguration>'),
 
     # A17 libbinder reads boot_id through an ifstream (lseek) when ProcessState
     # starts; exit_group keeps a failed init a clean exit instead of SIGSYS.
@@ -497,9 +523,11 @@ blob_fixups: blob_fixups_user_type = {
         ),
 
     # MiuiCamera port: neutralize two `bl abort` calls by branching to the
-    # function epilogue instead. Without this the camera provider aborts on
-    # 3rd-party capture, and MiuiCamera loses the provider right after a shot.
+    # function epilogue instead, and bypass the `get InternalStreamConfigInfo failed`
+    # `__android_log_assert` in `DeviceSessionPolicy::buildVendorConfiguration`
+    # while reloading x21 (`ldr x21, [x20, #0x88]; b 0x43f14`).
     'vendor/lib64/libmicamera_hal_policy.so': blob_fixup()
+        .sig_replace('e4 03 15 2a e5 03 16 2a b2 b1 02 94', 'e403152a954640f901000014')
         .sig_replace('e4 73 00 94 01 74 00 94', 'e473009462ffff17')
         .sig_replace('be 20 00 94 db 20 00 94', 'be20009458ffff17'),
 
