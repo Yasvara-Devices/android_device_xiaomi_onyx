@@ -112,10 +112,10 @@
     <float name="device_body_sar">0.859</float>
     <!-- whether support fps change -->
     <bool name="support_smart_fps">true</bool>
-    <!-- smart fps value OC 132Hz dynamic -->
-    <integer name="smart_fps_value">132</integer>
+    <!-- smart fps value -->
+    <integer name="smart_fps_value">120</integer>
     <integer-array name="fpsList">
-        <item>132</item>
+        <item>120</item>
         <item>90</item>
         <item>60</item>
     </integer-array>
