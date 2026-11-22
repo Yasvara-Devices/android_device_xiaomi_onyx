@@ -187,6 +187,24 @@ blob_fixups: blob_fixups_user_type = {
             r'(?m)^(\s*)zone_corner_report_time_limit_after_move=200000$',
             r'\g<1>zone_corner_report_time_limit_after_move=1000000',
         )
+        # Shrink the always-on landscape game edge strips and corner hold-off for
+        # onyx's flat 447 ppi panel (~1.1 mm strips, ~2.3 mm corners). Stock
+        # 60/70/100 px zones are sized for curved panels and overlap game HUD
+        # buttons (25-51 px from the bezel), delaying taps 41-79 ms even with
+        # mode 7 (edge filter) set to 0. Pentas Low/Mid/High (cornerfilter_area_step*)
+        # remains intact.
+        .regex_replace(
+            r'(?m)^(\s*)game_long_side_for_horizon=60$',
+            r'\g<1>game_long_side_for_horizon=20',
+        )
+        .regex_replace(
+            r'(?m)^(\s*)game_short_size_for_horizon=70$',
+            r'\g<1>game_short_size_for_horizon=20',
+        )
+        .regex_replace(
+            r'(?m)^(\s*)game_new_corner_size=100$',
+            r'\g<1>game_new_corner_size=40',
+        )
         # Pentas's Fast touch response, the base the HAL's mode 206 widens from for
         # Stable. Kalman prediction is what overshoots a flick (8.6 px -> ~1 px); no
         # HAL mode reaches it. Numbers in lab/touch-stutter/README.md.
