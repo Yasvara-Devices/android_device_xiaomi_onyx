@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: The Yasvara Project
 # SPDX-License-Identifier: Apache-2.0
 #
-# SPEC-0047: Onyx vendor-labelled GPU (kgsl) and fuel-gauge sysfs reads for `pantaud`.
+# Onyx vendor-labelled GPU (kgsl) and fuel-gauge sysfs reads for `pantaud`.
 
 allow pantaud vendor_sysfs_kgsl:dir r_dir_perms;
 allow pantaud vendor_sysfs_kgsl:file r_file_perms;

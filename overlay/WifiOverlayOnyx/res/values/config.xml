@@ -70,12 +70,12 @@
     <bool name="config_wifiStaDynamicCountryCodeUpdateSupported">true</bool>
 
     <!-- Learn the country from nearby routers (802.11d) when there is no SIM country, so a
-         phone without a SIM still gets its country's 5/6 GHz channels (SPEC-0014). -->
+         phone without a SIM still gets its country's 5/6 GHz channels. -->
     <bool name="config_wifiUpdateCountryCodeFromScanResultGeneric">true</bool>
 
     <!-- Configure wifi tcp buffersizes in the form:
          rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
-         Aligned with SPEC-0045 (init.onyx.rc) so ConnectivityService does not clobber
+         Aligned with init.onyx.rc so ConnectivityService does not clobber
          tcp_rmem/tcp_wmem defaults down or waste 512KB/256KB min per idle socket. -->
     <string name="config_wifi_tcp_buffers" translatable="false">4096,2097152,16777216,4096,1048576,16777216</string>
 

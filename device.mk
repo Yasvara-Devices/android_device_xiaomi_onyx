@@ -631,7 +631,7 @@ PRODUCT_COPY_FILES += \
 # Vendor
 $(call inherit-product, vendor/xiaomi/onyx/onyx-vendor.mk)
 
-# Laras depth build models (SPEC-0013 §4): onyx has the memory for ToonOut.
+# Laras depth build models: onyx has the memory for ToonOut.
 $(call inherit-product, vendor/yasvara/prebuilts/depth/depth.mk)
 $(call inherit-product, vendor/yasvara/prebuilts/afme/afme.mk)
 
@@ -654,6 +654,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.media.audio.common.types-V4-cpp
 
-# Layang floating windows (SPEC-0008 §7.1): freeform window management for WM core.
+# Layang floating windows: freeform window management for WM core.
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml

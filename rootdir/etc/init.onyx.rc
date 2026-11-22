@@ -71,7 +71,7 @@ on boot
     # AOSP write, in the same trigger, so it already resolves here.
     # Verified at runtime: /sys/fs/f2fs/sda34 is /data on this device.
     write /dev/sys/fs/by-name/userdata/iostat_enable 0
-    # Cap F2FS compress_cache at 10% of free RAM (SPEC-0048 Padat).
+    # Cap F2FS compress_cache at 10% of free RAM (Padat).
     write /dev/sys/fs/by-name/userdata/compress_percent 10
 
     # Create persist for camera calibration data
@@ -330,7 +330,7 @@ on property:sys.boot_completed=1
     # Enable PowerHAL hint processing
     setprop vendor.powerhal.init 1
 
-    # 5G NR / LTE CA TCP & Mobile Data Buffer Optimization (SPEC-0044 M5 + SPEC-0045)
+    # 5G NR / LTE CA TCP & Mobile Data Buffer Optimization
     write /proc/sys/net/ipv4/tcp_rmem "4096 2097152 16777216"
     write /proc/sys/net/ipv4/tcp_wmem "4096 1048576 16777216"
     write /proc/sys/net/core/rmem_max 16777216

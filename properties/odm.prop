@@ -118,7 +118,7 @@ ro.vendor.sre.enable=true
 
 # Graphics
 debug.sf.set_idle_timer_ms=1100
-# Yasvara Layang (SPEC-0008 §5.2, D13): per-uid frame-rate override caps a game in a
+# Yasvara Layang: per-uid frame-rate override caps a game in a
 # mini window at 30 fps. Spike S5: if the display stack (DPPS, idle timer) misbehaves,
 # set this back to false; mini games then simply run uncapped.
 ro.surface_flinger.enable_frame_rate_override=true

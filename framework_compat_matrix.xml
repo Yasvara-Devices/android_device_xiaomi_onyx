@@ -25,7 +25,7 @@
             <instance>hentak</instance>
         </interface>
     </hal>
-    <!-- Hentak's learned game-sound tagger (SPEC-0035), served by the vibrator HAL
+    <!-- Hentak's learned game-sound tagger, served by the vibrator HAL
          for audioserver. -->
     <hal format="aidl" optional="true">
         <name>vendor.yasvara.hentak</name>
