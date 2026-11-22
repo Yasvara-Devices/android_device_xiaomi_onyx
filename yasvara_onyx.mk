@@ -5,7 +5,6 @@
 
 
 # EXTREME: R8 whole-program optimization for ALL Java modules
-# Cycle fix: org.lineageos.platform uses services.impl (not services) as compile dep
 FULL_SYSTEM_OPTIMIZE_JAVA := true
 
 # Inherit from those products. Most specific first.
@@ -15,8 +14,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Disable default camera
 PRODUCT_NO_CAMERA := true
 
-# Inherit Yasvara (LineageOS based) common configuration.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+# Inherit Yasvara standalone common phone configuration.
+$(call inherit-product, vendor/yasvara/config/common_phone.mk)
 
 # Inherit from onyx device
 $(call inherit-product, device/xiaomi/onyx/device.mk)

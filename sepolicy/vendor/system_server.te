@@ -1,12 +1,27 @@
 # Copyright (C) 2026 IRedDragonICY
 # SPDX-License-Identifier: GPL-2.0-only
 #
-# Thermal/performance control has been moved out of system_server:
-# Pentas (system_app) now owns all kernel-node access — see
-# pentas_app.te (vendor) and sepolicy/private/pentas_app.te.
+# In-process ThermalPolicyBridge (system_server) writes profile/game-boost/bypass/display
+# sysfs switches so org.yasvara.pentas stays non-persistent (0 KB idle).
 
 # Battery supply temperature reading (battery stats / telemetry)
 allow system_server vendor_sysfs_battery_supply:file r_file_perms;
+
+# WALT scheduler boost: /proc/sys/walt/sched_boost
+allow system_server proc_walt:dir r_dir_perms;
+allow system_server proc_walt:file rw_file_perms;
+
+# MCA charging bypass nodes: smart_charge/{bypass_charge,smart_night}
+allow system_server vendor_sysfs_xm_power:dir r_dir_perms;
+allow system_server vendor_sysfs_xm_power:file rw_file_perms;
+
+# mi_thermald battery-saver interface: /sys/class/thermal/power_save/*
+allow system_server sysfs_power_save:dir r_dir_perms;
+allow system_server sysfs_power_save:file rw_file_perms;
+
+# Display HBM / DC dimming: /sys/class/mi_display/disp-DSI-0/disp_param
+allow system_server vendor_sysfs_displayfeature:dir r_dir_perms;
+allow system_server vendor_sysfs_displayfeature:file rw_file_perms;
 
 # Suppress: InputReader scans /vendor/usr directory (keylayout/idc/keychars have own labels)
 dontaudit system_server vendor_file:dir read;

@@ -177,9 +177,9 @@ BOARD_KERNEL_CMDLINE := \
     arm64.nobti \
     nowatchdog \
     loglevel=0 \
-    swinfo.fingerprint=$(LINEAGE_VERSION) \
-    mtdoops.fingerprint=$(LINEAGE_VERSION) \
-    bootmonitor.fingerprint=$(LINEAGE_VERSION)
+    swinfo.fingerprint=$(YASVARA_VERSION) \
+    mtdoops.fingerprint=$(YASVARA_VERSION) \
+    bootmonitor.fingerprint=$(YASVARA_VERSION)
 
 
 BOARD_BOOTCONFIG := \
@@ -309,8 +309,8 @@ TARGET_USERIMAGES_USE_F2FS := true
 ENABLE_VENDOR_RIL_SERVICE := true
 
 # Sepolicy
-include device/lineage/sepolicy/common/sepolicy.mk
-include device/lineage/sepolicy/libperfmgr/sepolicy.mk
+include vendor/yasvara/sepolicy/common/sepolicy.mk
+include vendor/yasvara/sepolicy/libperfmgr/sepolicy.mk
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include packages/apps/Pentas/sepolicy/sepolicy.mk
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private

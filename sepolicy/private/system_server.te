@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: The Yasvara Project
+# SPDX-License-Identifier: Apache-2.0
+#
+# In-process display color mode and single-tap-to-wake bridge (replaces XiaomiParts).
+
+allow system_server vendor_hal_displayfeature_xiaomi_service:service_manager find;
+binder_call(system_server, vendor_hal_displayfeature_xiaomi_default)
+
+allow system_server sysfs_wake_gesture:file rw_file_perms;
