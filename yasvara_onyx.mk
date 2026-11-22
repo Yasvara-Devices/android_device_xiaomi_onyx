@@ -156,14 +156,11 @@ PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
 # Guides dex2oat to prioritize hot methods → better 1st boot app launch
 PRODUCT_DEX_PREOPT_GENERATE_DM_FILES := true
 
-# USAP Pool: Pre-fork zygote processes for 15-30% faster cold app launch
-# Instead of fork→specialize, just specialize an already-forked process
+# USAP Pool disabled (matches stock HOS 4 and AOSP 17 default): enabling it leaks
+# /dev/socket/usap_pool_primary into forked child apps, triggering FinalizerDaemon
+# SELinux getopt denials on every app GC.
 PRODUCT_SYSTEM_PROPERTIES += \
-    dalvik.vm.usap_pool_enabled=true \
-    dalvik.vm.usap_pool_size_max=5 \
-    dalvik.vm.usap_pool_size_min=2 \
-    dalvik.vm.usap_refill_threshold=2 \
-    dalvik.vm.usap_pool_refill_delay_ms=1500
+    dalvik.vm.usap_pool_enabled=false
 
 # ART GC tuning for 12GB RAM — allow bigger heap before GC triggers
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -174,14 +171,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_SYSTEM_PROPERTIES += \
     dalvik.vm.madvise.artfile.size=209715200
 
-# Disable system tracing daemons — saves CPU + disk writes → battery
-# Use PRODUCT_PROPERTY_OVERRIDES to take precedence over base_system.mk
-PRODUCT_PROPERTY_OVERRIDES += \
+# Disable system tracing daemons & persistent logging — saves CPU + disk writes → battery.
+# Place in PRODUCT_PRODUCT_PROPERTIES (/product/etc/build.prop) so system `init` loads them
+# AFTER /system/build.prop (overriding base_system.mk's persist.traced.enable=1) without
+# hitting vendor_init SELinux property_service denials.
+PRODUCT_PRODUCT_PROPERTIES += \
     persist.traced.enable=0 \
-    persist.traced_perf.enable=0
-
-# Disable persistent logging — saves disk writes → battery
-PRODUCT_PROPERTY_OVERRIDES += \
+    persist.traced_perf.enable=0 \
     logd.logpersistd.enable=false \
     persist.logd.logpersistd=clear
 

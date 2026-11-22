@@ -367,12 +367,6 @@ ro.config.media_vol_steps=15
 ro.config.system_vol_steps=15
 ro.config.vc_call_vol_steps=11
 
-# Memory optimization (Beluga)
-ro.vendor.beluga.c=0x4800
-ro.vendor.beluga.p=0x3
-ro.vendor.beluga.s=0x900
-ro.vendor.beluga.t=0x240
-
 # Perf
 ro.vendor.extension_library=libqti-perfd-client.so
 ro.vendor.perf-hal.ver=3.0

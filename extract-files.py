@@ -63,6 +63,7 @@ lib_fixups: lib_fixups_user_type = {
         'vendor.qti.diaghal-V1-ndk',
         'vendor.qti.diaghal@1.0',
         'vendor.qti.hardware.wifidisplaysession_aidl-V1-ndk',
+        'vendor.qti.hardware.wifidisplaysession_aidl-V2-ndk',
         'vendor.qti.ims.uceaidlservice-V1-ndk',
         'vendor.qti.ImsRtpService-V1-ndk',
         'vendor.qti.qccsyshal_aidl-V1-ndk',
@@ -202,7 +203,9 @@ blob_fixups: blob_fixups_user_type = {
         .regex_replace(
             r'(?m)^(\s*)first_jitter_stable_frame_game_mode=36$',
             r'\g<1>first_jitter_stable_frame_game_mode=18',
-    ),
+        )
+        .regex_replace(r'(?m)^(\s*)fod_area_overlap=40$', r'\g<1>fod_area_overlap=30')
+        .regex_replace(r'(?m)^(\s*)fod_peak_thd=150$', r'\g<1>fod_peak_thd=120'),
 
     # The SR table in MISR::MISR, at the scales the SM8735 models were built for: stock keeps these
     # for one product name, and the default table asks for models only the SM8750 has.
@@ -320,6 +323,12 @@ blob_fixups: blob_fixups_user_type = {
             'libtinyxml2-v34.so'
     ),
 
+    'odm/lib64/libdynamicelvss.so': blob_fixup()
+        .replace_needed(
+            'android.hardware.sensors-V2-ndk.so',
+            'android.hardware.sensors-V3-ndk.so'
+    ),
+
     (
         'odm/lib64/libAncHumanPreviewBokeh.so',
         'odm/lib64/libMiEmojiEffect.so',
@@ -356,10 +365,6 @@ blob_fixups: blob_fixups_user_type = {
     # provide it. A17 libion is a stub (ION is gone on GKI), which is enough.
     'odm/lib64/anc.hal.so': blob_fixup()
         .add_needed('libion.so'),
-
-    # libheif was removed in A17 and no libheif symbol is referenced.
-    'system_ext/lib64/libwfdcommonutils.so': blob_fixup()
-        .remove_needed('libheif.so'),
 
     # A17 moved AudioSystem out of libaudioclient into libaudiobase.
     'system_ext/lib64/libwfdmmsrc_system.so': blob_fixup()
@@ -400,12 +405,6 @@ blob_fixups: blob_fixups_user_type = {
             '<ambientLightHorizonShort>500</ambientLightHorizonShort>',
         )
         .regex_replace(r'</displayConfiguration>', DISPLAY_CONFIG_TAIL + '</displayConfiguration>'),
-
-    # A17 libbinder reads boot_id through an ifstream (lseek) when ProcessState
-    # starts; exit_group keeps a failed init a clean exit instead of SIGSYS.
-    'vendor/etc/seccomp_policy/qesdksec.policy': blob_fixup()
-        .add_line_if_missing('lseek: 1')
-        .add_line_if_missing('exit_group: 1'),
 
     'vendor/etc/sensors/hals.conf': blob_fixup()
         .regex_replace('.*vl53l8.*\n?', ''),
