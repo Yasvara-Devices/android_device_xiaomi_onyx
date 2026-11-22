@@ -33,3 +33,7 @@ allow system_app vendor_sysfs_kgsl_gpuclk:file r_file_perms;
 allow system_app vendor_sysfs_xm_power:dir r_dir_perms;
 allow system_app vendor_sysfs_xm_power:file rw_file_perms;
 allow system_app vendor_sysfs_xm_power:lnk_file r_file_perms;
+
+# Pentas: dynamic quick-charge profile detection from Device Tree
+# Path: /sys/firmware/devicetree/base/soc/mca_strategy_quick_charge/div_max_curr
+r_dir_file(system_app, vendor_sysfs_devicetree_soc)

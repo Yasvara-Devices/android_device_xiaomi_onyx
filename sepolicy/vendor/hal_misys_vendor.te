@@ -27,7 +27,7 @@ allow hal_misys_vendor platform_app_all:fd use;
 allow hal_misys_vendor appdomain_tmpfs:file { getattr map read write };
 
 # "file /dev/kmsg r" in the init rc
-allow hal_misys_vendor kmsg_device:chr_file { open read write };
+allow hal_misys_vendor kmsg_device:chr_file { getattr open read write };
 
 # Observed denial from a permissive run: HardWareInfo reads vendor.camera.sensor.*
 get_prop(hal_misys_vendor, vendor_camera_sensor_prop)
@@ -46,4 +46,8 @@ get_prop(hal_misys_vendor, boot_status_prop)
 # ownership neverallow forbids a vendor domain reading it - granting it fails the
 # build. The properties involved are diagnostics only (persist.bsp.logmgr.disable,
 # persist.sys.abreuse.abstatus, minidump/ramdump/blackbox boot counters), none of
-# them on the watermark path.
+# them on the watermark path. Suppress audit spam from diagnostic modules
+# (ModuleManager default_prop, ChargerLogger wake_lock/default_android_service).
+dontaudit hal_misys_vendor default_prop:file read;
+dontaudit hal_misys_vendor sysfs_wake_lock:file write;
+dontaudit hal_misys_vendor default_android_service:service_manager find;

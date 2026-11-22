@@ -1,0 +1,2 @@
+# Suppress: HOS 4 Codec2 probes system-internal props (custom_version_prop, misctrl_prop)
+dontaudit hal_codec2_server { custom_version_prop misctrl_prop }:file read;

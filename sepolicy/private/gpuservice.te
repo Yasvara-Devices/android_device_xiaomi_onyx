@@ -1,0 +1,4 @@
+# gpuservice checks /sys/fs/bpf/map_gpuWork_gpu_work_map with stat/getattr before opening;
+# system/sepolicy/private/gpuservice.te grants { read write } and bpfloader.te already
+# exempts -gpuservice from the fs_bpf:file { getattr read } neverallow.
+allow gpuservice fs_bpf:file getattr;

@@ -22,6 +22,7 @@ allow hal_audio_default hal_micharge_service:service_manager find;
 
 set_prop(hal_audio_default, vendor_audio_prop)
 
-# Suppress: Audio HAL reads default_prop and debugfs (non-critical, functional)
+# Suppress: Audio HAL reads default_prop, debugfs, and sys.audio.ceregion (non-critical, functional)
 dontaudit hal_audio_default default_prop:file read;
 dontaudit hal_audio_default debugfs:dir read;
+dontaudit hal_audio_default audio_prop:file read;
