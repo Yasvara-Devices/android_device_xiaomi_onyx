@@ -330,6 +330,21 @@ on property:sys.boot_completed=1
     # Enable PowerHAL hint processing
     setprop vendor.powerhal.init 1
 
+    # Trim always-on Qualcomm/Xiaomi telemetry, China-only TEE & idle debug daemons
+    # (~54 MB R+S, 54 threads; zero clients on AOSP/Yasvara; restartable via `start <svc>`).
+    # Keep vendor.diag-router running: stopping it causes 12 QCOM daemons to 1 Hz retry-loop.
+    stop vendor.tlpd
+    stop vendor.qcc-vendor
+    stop vendor.qwesd
+    stop vendor.qsap.dcfd
+    stop vendor.qsap.sensors
+    stop vendor.qti.snapdragonServices
+    stop qspmhal
+    stop vendor.soter
+    stop vendor.trustedui
+    stop toucheventcheck
+    stop vendor.vppservice
+
     # 5G NR / LTE CA TCP & Mobile Data Buffer Optimization
     write /proc/sys/net/ipv4/tcp_rmem "4096 2097152 16777216"
     write /proc/sys/net/ipv4/tcp_wmem "4096 1048576 16777216"
