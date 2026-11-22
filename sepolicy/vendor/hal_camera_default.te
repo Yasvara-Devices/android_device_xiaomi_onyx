@@ -18,5 +18,6 @@ allow hal_camera_default system_data_file:dir { search getattr };
 # Suppress: Camera HAL tries to register intentaware service and search /data/local/tmp at boot
 dontaudit hal_camera_default default_android_service:service_manager add;
 dontaudit hal_camera_default shell_data_file:dir search;
-# Suppress: Camera HAL tries to find QSPM HAL service
+# Suppress: Camera HAL tries to find QSPM HAL service and probes app MCS dirs under /data
 dontaudit hal_camera_default vendor_hal_qspmhal_service:service_manager find;
+dontaudit hal_camera_default system_data_file:dir search;

@@ -36,3 +36,9 @@ dontaudit shell {
   linkerconfig_file
 }:dir search;
 dontaudit shell proc_filesystems:file read;
+
+# Suppress: QSPM framework hook lookup from apps & background modem diag_logs writes
+dontaudit appdomain vendor_hal_qspmhal_service:service_manager find;
+userdebug_or_eng(`
+  dontaudit vendor_diag-router vendor_data_file:dir write;
+')

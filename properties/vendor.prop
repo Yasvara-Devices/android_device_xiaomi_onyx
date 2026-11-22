@@ -538,4 +538,8 @@ persist.log.tag.vendor.qti.vibratorOL=WARN
 persist.log.tag.vendor.qti.hardware.display.composer-service=WARN
 persist.log.tag.midlhook=WARN
 persist.log.tag.EcoEngine=WARN
+persist.log.tag.wpa_supplicant=WARN
+persist.log.tag.hostapd=WARN
+persist.log.tag.audiohalservice.qti=WARN
+persist.log.tag.AgmIpc=WARN
 

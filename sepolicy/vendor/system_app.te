@@ -37,3 +37,7 @@ allow system_app vendor_sysfs_xm_power:lnk_file r_file_perms;
 # Pentas: dynamic quick-charge profile detection from Device Tree
 # Path: /sys/firmware/devicetree/base/soc/mca_strategy_quick_charge/div_max_curr
 r_dir_file(system_app, vendor_sysfs_devicetree_soc)
+
+# Settings Hardware Info: allow reading DDR type, suppress generic sysfs probes
+allow system_app vendor_sysfs_ddr:file r_file_perms;
+dontaudit system_app sysfs:{ dir file } read;

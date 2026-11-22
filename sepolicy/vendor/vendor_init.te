@@ -10,6 +10,7 @@ set_prop(vendor_init, vendor_radio_prop)
 set_prop(vendor_init, vendor_ssr_prop)
 set_prop(vendor_init, vendor_thermal_normal_prop)
 set_prop(vendor_init, vendor_touchfeature_prop)
+set_prop(vendor_init, vendor_touch_hostprocess_prop)
 
 # Pentas: allow vendor_init to forward persist.sys.game.enhance.*
 # → vendor.display.game.* via init.rc property triggers
@@ -37,3 +38,7 @@ allow init vendor_sysfs_graphics:file rw_file_perms;
 
 # Suppress: vendor_init checks /mnt/rescue partition attributes at boot
 dontaudit vendor_init cache_file:dir getattr;
+
+# Suppress: vendor_init attempts to set system-owned wifi prop or shell entrypoint
+dontaudit vendor_init wifi_prop:property_service set;
+dontaudit vendor_init vendor_shell_exec:file entrypoint;

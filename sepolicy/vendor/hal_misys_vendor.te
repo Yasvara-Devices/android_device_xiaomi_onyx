@@ -51,3 +51,4 @@ get_prop(hal_misys_vendor, boot_status_prop)
 dontaudit hal_misys_vendor default_prop:file read;
 dontaudit hal_misys_vendor sysfs_wake_lock:file write;
 dontaudit hal_misys_vendor default_android_service:service_manager find;
+dontaudit hal_misys_vendor { block_device vfat }:dir search;

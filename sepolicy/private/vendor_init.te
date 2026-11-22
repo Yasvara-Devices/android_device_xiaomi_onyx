@@ -1,0 +1,2 @@
+# Suppress: vendor_init checks private init.svc.* status props during boot triggers
+dontaudit vendor_init init_service_status_private_prop:file read;

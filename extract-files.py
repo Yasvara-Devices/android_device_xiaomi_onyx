@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import struct
 from pathlib import Path
 
 from extract_utils.fixups_blob import (
@@ -97,6 +98,273 @@ def blob_fixup_graphic_buffer_size(
             with open(file_path, 'rb+') as f:
                 f.seek(int(offset[:-1], 16))
                 f.write(b'\x00\xa6\x81\x52')  # AArch64 mov w0, #0xd30
+
+
+llvm_readelf_path = str(Path(llvm_objdump_path).with_name('llvm-readelf'))
+
+
+def _elf_pt_loads(data: bytes) -> list[tuple[int, int, int, int]]:
+    e_phoff = struct.unpack_from('<Q', data, 32)[0]
+    e_phentsize, e_phnum = struct.unpack_from('<HH', data, 54)
+    loads = []
+    for i in range(e_phnum):
+        off = e_phoff + i * e_phentsize
+        p_type, _, p_offset, p_vaddr, _, p_filesz, p_memsz = struct.unpack_from(
+            '<IIQQQQQ', data, off
+        )
+        if p_type == 1:
+            loads.append((p_offset, p_vaddr, p_filesz, p_memsz))
+    return loads
+
+
+def _elf_va_to_foff(loads: list[tuple[int, int, int, int]], va: int) -> int:
+    for p_offset, p_vaddr, p_filesz, _ in loads:
+        if p_vaddr <= va < p_vaddr + p_filesz:
+            return p_offset + (va - p_vaddr)
+    raise RuntimeError(f'VA {va:#x} not mapped in any PT_LOAD file range')
+
+
+def _elf_foff_to_va(loads: list[tuple[int, int, int, int]], foff: int) -> int:
+    for p_offset, p_vaddr, p_filesz, _ in loads:
+        if p_offset <= foff < p_offset + p_filesz:
+            return p_vaddr + (foff - p_offset)
+    raise RuntimeError(f'file offset {foff:#x} not mapped in any PT_LOAD')
+
+
+def _encode_aarch64_b(src_va: int, target_va: int) -> bytes:
+    diff = target_va - src_va
+    assert diff % 4 == 0, f'unaligned branch diff {diff}'
+    imm26 = (diff >> 2) & 0x03FFFFFF
+    return struct.pack('<I', 0x14000000 | imm26)
+
+
+def blob_fixup_elf_u32_symbol(
+    ctx: BlobFixupCtx,
+    file: File,
+    file_path: str,
+    symbol: str,
+    new_val: int,
+    *args,
+    **kwargs,
+):
+    """Set an exported 4-byte .data log-level global (e.g. pal_log_lvl) to new_val."""
+    out = run_cmd([llvm_readelf_path, '--dyn-syms', '--wide', file_path])
+    sym_va = None
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) >= 8 and parts[6] != 'UND' and parts[7] == symbol:
+            sym_va = int(parts[1], 16)
+            break
+    if sym_va is None:
+        raise RuntimeError(f'{file_path}: exported symbol {symbol!r} not found')
+
+    with open(file_path, 'rb+') as f:
+        data = f.read()
+        loads = _elf_pt_loads(data)
+        foff = _elf_va_to_foff(loads, sym_va)
+        f.seek(foff)
+        f.write(struct.pack('<I', new_val))
+
+
+def blob_fixup_set_log_level_err_only(
+    ctx: BlobFixupCtx,
+    file: File,
+    file_path: str,
+    symbol: str,
+    *args,
+    **kwargs,
+):
+    """Patch setPalLogLevel/setAgmLogLevel so level=1 sets mask 0x1 (ERR only), not 0x3."""
+    stub = run_cmd(
+        [llvm_objdump_path, '-d', f'--disassemble-symbols={symbol}', file_path]
+    )
+    body_va = None
+    for line in stub.splitlines():
+        toks = line.split()
+        if len(toks) >= 4 and toks[2] == 'b' and toks[3].startswith('0x'):
+            body_va = int(toks[3], 16)
+            break
+    if body_va is None:
+        raise RuntimeError(f'{file_path}: failed to resolve CFI target for {symbol}')
+
+    body = run_cmd(
+        [
+            llvm_objdump_path,
+            '-d',
+            f'--start-address={body_va:#x}',
+            f'--stop-address={body_va + 0x120:#x}',
+            file_path,
+        ]
+    )
+    insns = []
+    for line in body.splitlines():
+        toks = line.split()
+        if len(toks) >= 4 and toks[0].endswith(':'):
+            try:
+                va = int(toks[0][:-1], 16)
+                word = int(toks[1], 16)
+            except ValueError:
+                continue
+            insns.append((va, word, toks[2], ' '.join(toks[3:])))
+
+    eq_target = None
+    for i in range(len(insns) - 1):
+        _, _, m0, op0 = insns[i]
+        _, _, m1, op1 = insns[i + 1]
+        if m0 == 'cmp' and '#0x1' in op0 and m1 == 'b.eq':
+            eq_target = int(op1.split()[0], 16)
+            break
+    if eq_target is None:
+        raise RuntimeError(f'{file_path}: cmp #0x1 / b.eq not found in {symbol}')
+
+    patch_va = None
+    for va, word, m, op in insns:
+        if eq_target <= va <= eq_target + 0x10 and m == 'mov' and 'w9,' in op:
+            if word == 0x52800069:  # mov w9, #0x3
+                patch_va = va
+                break
+            if word == 0x52800029:  # already mov w9, #0x1 (idempotent)
+                return
+    if patch_va is None:
+        raise RuntimeError(
+            f'{file_path}: mov w9, #0x3 not found at {eq_target:#x} in {symbol}'
+        )
+
+    with open(file_path, 'rb+') as f:
+        data = f.read()
+        loads = _elf_pt_loads(data)
+        foff = _elf_va_to_foff(loads, patch_va)
+        f.seek(foff)
+        f.write(struct.pack('<I', 0x52800029))  # mov w9, #0x1
+
+
+def blob_fixup_silence_log_by_string(
+    ctx: BlobFixupCtx,
+    file: File,
+    file_path: str,
+    needles: list[str],
+    *args,
+    **kwargs,
+):
+    """Silence specific hot-loop __android_log_print callsites by .rodata format string.
+
+    Handles both direct `bl __android_log_*@plt` (-> `mov w0, #0`, ABI-safe) and Clang
+    tail-merged `b <shared_log_trampoline>` (-> `b <bl_va + 4>`, skipping only the log).
+    Idempotent across re-runs and immune to address shifts across HyperOS blob drops.
+    """
+    with open(file_path, 'rb') as f:
+        data = f.read()
+    loads = _elf_pt_loads(data)
+
+    target_vas: dict[int, str] = {}
+    for needle in needles:
+        nb = needle.encode('utf-8')
+        pos = data.find(nb)
+        if pos < 0:
+            raise RuntimeError(f'{file_path}: log string {needle!r} not found')
+        while pos >= 0:
+            s = pos
+            while s > 0 and data[s - 1] != 0:
+                s -= 1
+            target_vas[_elf_foff_to_va(loads, s)] = needle
+            pos = data.find(nb, pos + 1)
+
+    disasm = run_cmd([llvm_objdump_path, '-d', file_path])
+    insns: list[tuple[int, str, str]] = []
+    for line in disasm.splitlines():
+        t = line.lstrip()
+        if ':' not in t:
+            continue
+        addr_s, rest = t.split(':', 1)
+        if not addr_s or any(c not in '0123456789abcdefABCDEF' for c in addr_s):
+            continue
+        rest = rest.lstrip()
+        toks = rest.split(None, 2)
+        if len(toks) < 2 or len(toks[0]) != 8:
+            continue
+        va = int(addr_s, 16)
+        mnem = toks[1]
+        ops = toks[2].strip() if len(toks) >= 3 else ''
+        insns.append((va, mnem, ops))
+
+    va_to_idx = {va: i for i, (va, _, _) in enumerate(insns)}
+    patches: list[tuple[int, bytes]] = []
+    matched_needles: set[str] = set()
+
+    reg_page: dict[str, int] = {}
+    for i, (va, mnem, ops) in enumerate(insns):
+        if mnem in ('bl', 'blr', 'ret', 'b'):
+            reg_page.clear()
+            continue
+        str_va = None
+        if mnem == 'adrp':
+            p = [x.strip() for x in ops.split(',')]
+            if len(p) >= 2:
+                try:
+                    reg_page[p[0]] = int(p[1].split()[0], 16)
+                except ValueError:
+                    pass
+        elif mnem == 'add':
+            p = [x.strip() for x in ops.split(',')]
+            if len(p) >= 3 and p[1] in reg_page and p[2].startswith('#'):
+                try:
+                    off = int(p[2][1:].split()[0], 0)
+                    str_va = reg_page[p[1]] + off
+                except ValueError:
+                    pass
+        elif mnem == 'adr':
+            p = [x.strip() for x in ops.split(',')]
+            if len(p) >= 2:
+                try:
+                    str_va = int(p[1].split()[0], 16)
+                except ValueError:
+                    pass
+
+        if str_va not in target_vas:
+            continue
+        needle = target_vas[str_va]
+        # Scan forward up to 12 insns for the log call or tail-merged trampoline branch
+        for j in range(i + 1, min(len(insns), i + 13)):
+            c_va, c_mnem, c_ops = insns[j]
+            if c_mnem == 'bl' and '<__android_log_' in c_ops:
+                patches.append((c_va, struct.pack('<I', 0x52800000)))  # mov w0, #0
+                matched_needles.add(needle)
+                break
+            if c_mnem == 'mov' and c_ops.startswith('w0, #0x0'):
+                # Already patched to mov w0, #0 (idempotent)
+                matched_needles.add(needle)
+                break
+            if c_mnem == 'b':
+                try:
+                    tgt = int(c_ops.split()[0], 16)
+                except ValueError:
+                    break
+                # Check if tgt..tgt+3 insns enters a shared `bl __android_log_*@plt`
+                t_idx = va_to_idx.get(tgt)
+                if t_idx is not None:
+                    # Already patched to land right after `bl __android_log_*`?
+                    if t_idx > 0 and insns[t_idx - 1][1] == 'bl' and '<__android_log_' in insns[t_idx - 1][2]:
+                        matched_needles.add(needle)
+                        break
+                    for k in range(t_idx, min(len(insns), t_idx + 4)):
+                        k_va, k_mnem, k_ops = insns[k]
+                        if k_mnem == 'bl' and '<__android_log_' in k_ops:
+                            patches.append((c_va, _encode_aarch64_b(c_va, k_va + 4)))
+                            matched_needles.add(needle)
+                            break
+                break
+            if c_mnem in ('bl', 'blr', 'ret'):
+                break
+
+    missing = [n for n in needles if n not in matched_needles]
+    if missing:
+        raise RuntimeError(f'{file_path}: no log callsite matched for {missing}')
+
+    if patches:
+        with open(file_path, 'rb+') as f:
+            for p_va, p_bytes in patches:
+                f.seek(_elf_va_to_foff(loads, p_va))
+                f.write(p_bytes)
 
 
 DISPLAY_CONFIG_TAIL = Path(__file__).with_name('configs').joinpath(
@@ -553,7 +821,12 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed(
             'android.hardware.graphics.common-V5-ndk.so',
             'android.hardware.graphics.common-V7-ndk.so'
-    ),
+        )
+        .call(
+            blob_fixup_silence_log_by_string,
+            ['[%s] Skipping empty output buffer'],
+            need_tmp_dir=False,
+        ),
 
     'vendor/lib64/libqcrilNrVoiceModule.so': blob_fixup()
         .sig_replace('a1 00 80 52 22', 'a1 00 80 52 02'),
@@ -590,6 +863,46 @@ blob_fixups: blob_fixups_user_type = {
 
     'vendor/lib64/vendor.libdpmframework.so': blob_fixup()
         .add_needed('libhidlbase_shim.so'),
+
+    # Silence repetitive vendor/Xiaomi D/I/W logcat spam (keeps all ERROR logs intact).
+    # Implemented as dynamic symbol/string-driven fixups so they survive HyperOS updates.
+    'vendor/lib64/libar-pal.so': blob_fixup()
+        .call(blob_fixup_elf_u32_symbol, 'pal_log_lvl', 1, need_tmp_dir=False)
+        .call(blob_fixup_set_log_level_err_only, 'setPalLogLevel', need_tmp_dir=False),
+
+    'vendor/lib64/libagm.so': blob_fixup()
+        .call(blob_fixup_elf_u32_symbol, 'agm_log_lvl', 1, need_tmp_dir=False)
+        .call(blob_fixup_set_log_level_err_only, 'setAgmLogLevel', need_tmp_dir=False),
+
+    'vendor/lib64/liblx-osal.so': blob_fixup()
+        .call(blob_fixup_elf_u32_symbol, 'ar_log_lvl', 1, need_tmp_dir=False),
+
+    'odm/lib64/libtouchreport_hal.so': blob_fixup()
+        .call(blob_fixup_elf_u32_symbol, 'hal_log_level', 1, need_tmp_dir=False),
+
+    'odm/lib64/libtouchreport_alg.so': blob_fixup()
+        .call(blob_fixup_elf_u32_symbol, 'alg_log_level', 1, need_tmp_dir=False),
+
+    'odm/lib64/libclient2slpi.notifier.so': blob_fixup()
+        .call(
+            blob_fixup_silence_log_by_string,
+            ['Sensor: notify citsensorservice to trigger cwb'],
+            need_tmp_dir=False,
+        ),
+
+    'vendor/lib64/libgrallocutils.so': blob_fixup()
+        .call(
+            blob_fixup_silence_log_by_string,
+            ['Explicit UBWC formats such as'],
+            need_tmp_dir=False,
+        ),
+
+    'odm/bin/hw/vendor.xiaomi.hw.touchfeature-service': blob_fixup()
+        .call(
+            blob_fixup_silence_log_by_string,
+            ['%s: send hand detect result %d'],
+            need_tmp_dir=False,
+        ),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
