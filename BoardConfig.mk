@@ -173,8 +173,6 @@ BOARD_KERNEL_CMDLINE := \
     page_alloc.shuffle=0 \
     randomize_kstack_offset=0 \
     mitigations=off \
-    arm64.nopauth \
-    arm64.nobti \
     nowatchdog \
     loglevel=0 \
     swinfo.fingerprint=$(YASVARA_VERSION) \
