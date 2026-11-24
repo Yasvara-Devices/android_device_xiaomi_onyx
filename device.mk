@@ -222,6 +222,10 @@ PRODUCT_CHARACTERISTICS := nosdcard
 # DebugFS
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
 
+# Display - stock skin/lux brightness table for the opt-in thermal guard
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/display/thermal_brightness_control.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/thermal_brightness_control.xml
+
 # Display - dynamic 60/90/120
 $(call soong_config_set,surfaceflinger,frame_rate_category_high,120)
 $(call soong_config_set,surfaceflinger,frame_rate_category_min,60)
