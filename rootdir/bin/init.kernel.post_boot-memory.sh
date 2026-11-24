@@ -127,6 +127,11 @@ function configure_thp()
 	## Goal is to allow all allocations to use THP whilst minimizing allocaiton delays
 	# Allow all eligibe page faults to use THP
 	echo always > /sys/kernel/mm/transparent_hugepage/enabled
+	# Linux 6.8+ multi-size THP (mTHP): enable 64 KiB pages to unlock ARM64
+	# hardware CONT-PTE (16x 4K pages per TLB entry) with zero compaction stall.
+	if [ -f /sys/kernel/mm/transparent_hugepage/hugepages-64kB/enabled ]; then
+		echo always > /sys/kernel/mm/transparent_hugepage/hugepages-64kB/enabled
+	fi
 	# Prevent page faults on THP-elgible VMAs from causing reclaim or compaction
 	echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
