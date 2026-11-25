@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: The Yasvara Project
+# SPDX-License-Identifier: Apache-2.0
+#
+# Onyx vendor-labelled A/B firmware & boot block-device access for `pasangd`
+# (mirrors `update_engine_common.te` for SM8735/SM8750 inactive-slot OTA updates).
+
+allow pasangd {
+    vendor_custom_ab_block_device
+    vendor_xbl_block_device
+    vendor_uefi_block_device
+    vendor_modem_block_device
+    recovery_block_device
+}:blk_file rw_file_perms;
